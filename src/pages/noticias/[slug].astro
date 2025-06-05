@@ -1,0 +1,19 @@
+---
+import Layout from "../../layouts/Layout.astro";
+
+import { getPostInfo } from "../../lib/wp";
+
+const slug = Astro.params.slug;
+console.log("Slug being used:", slug);
+
+if (!slug) return Astro.redirect("/404");
+
+export const prerender = false;
+
+const { title, content } = await getPostInfo(slug);
+---
+
+<Layout>
+  <h1>{title}</h1>
+  <div set:html={content} class="pl-5" />
+</Layout>
