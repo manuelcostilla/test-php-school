@@ -1,15 +1,33 @@
 ---
 import Layout from "../layouts/Layout.astro";
-import { getPageInfo, getLastPost } from "../lib/wp";
+import { getPageInfo, getLastPost, getPostsByCategory } from "../lib/wp";
+
 const { title, content } = await getPageInfo("sample-page");
-const posts = await getLastPost({ perPage: 3 });
+
+const latestPosts = await getLastPost({ perPage: 3 });
+
+const NOTICIAS_CATEGORY_ID = 1;
+
+const noticiasPosts = await getPostsByCategory(NOTICIAS_CATEGORY_ID, {
+  perPage: 6,
+});
+
+const EVENTOS_CATEGORY_ID = 3;
+
+const eventosPosts = await getPostsByCategory(EVENTOS_CATEGORY_ID, {
+  perPage: 6,
+});
 ---
 
 <Layout>
   <main class="container mx-auto px-4 py-8">
+    {/* Page Info Section */}
     <section class="mb-12">
       <h1 class="text-4xl font-bold text-gray-800 mb-4">{title}</h1>
-      <div set:html={content} class="prose lg:prose-lg text-gray-700 leading-relaxed" />
+      <div
+        set:html={content}
+        class="prose lg:prose-lg text-gray-700 leading-relaxed"
+      />
     </section>
 
     <hr class="border-gray-200 my-12" />
@@ -18,7 +36,7 @@ const posts = await getLastPost({ perPage: 3 });
       <h2 class="text-3xl font-semibold text-gray-800 mb-8">Latest Posts</h2>
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
         {
-          posts.map((post: any) => {
+          latestPosts.map((post: any) => {
             return (
               <article class="bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300 overflow-hidden">
                 {post.featuredImage && (
@@ -36,7 +54,10 @@ const posts = await getLastPost({ perPage: 3 });
                     <li>{new Date(post.date).toLocaleDateString()}</li>
                     <li class="list-disc ml-4">{post.author}</li>
                   </ul>
-                  <div set:html={post.excerpt} class="text-gray-700 text-base mb-4" />
+                  <div
+                    set:html={post.excerpt}
+                    class="text-gray-700 text-base mb-4"
+                  />
                   <a
                     href={`/noticias/${post.slug}`}
                     class="inline-block text-blue-600 hover:text-blue-800 font-medium transition-colors duration-200"
@@ -47,6 +68,99 @@ const posts = await getLastPost({ perPage: 3 });
               </article>
             );
           })
+        }
+      </div>
+    </section>
+
+    <hr class="border-gray-200 my-12" />
+
+    <section>
+      <h2 class="text-3xl font-semibold text-gray-800 mb-8">Noticias</h2>
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        {
+          noticiasPosts.length > 0 ? (
+            noticiasPosts.map((post: any) => {
+              return (
+                <article class="bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300 overflow-hidden">
+                  {post.featuredImage && (
+                    <img
+                      src={post.featuredImage}
+                      alt={post.title}
+                      class="w-full h-48 object-cover"
+                    />
+                  )}
+                  <div class="p-6">
+                    <h3 class="text-xl font-bold text-gray-800 mb-2">
+                      {post.title}
+                    </h3>
+                    <ul class="flex items-center text-sm text-gray-500 mb-4 space-x-3">
+                      <li>{new Date(post.date).toLocaleDateString()}</li>
+                      <li class="list-disc ml-4">{post.author}</li>
+                    </ul>
+                    <div
+                      set:html={post.excerpt}
+                      class="text-gray-700 text-base mb-4"
+                    />
+                    <a
+                      href={`/noticias/${post.slug}`}
+                      class="inline-block text-blue-600 hover:text-blue-800 font-medium transition-colors duration-200"
+                    >
+                      Ver mas informacion &rarr;
+                    </a>
+                  </div>
+                </article>
+              );
+            })
+          ) : (
+            <p class="text-gray-600 text-center col-span-full">
+              No hay publicaciones en la categoría de Noticias.
+            </p>
+          )
+        }
+      </div>
+    </section>
+    <section>
+      <h2 class="text-3xl font-semibold text-gray-800 mb-8">Eventos</h2>
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        {
+          eventosPosts.length > 0 ? (
+            eventosPosts.map((post: any) => {
+              return (
+                <article class="bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300 overflow-hidden">
+                  {post.featuredImage && (
+                    <img
+                      src={post.featuredImage}
+                      alt={post.title}
+                      class="w-full h-48 object-cover"
+                    />
+                  )}
+                  <div class="p-6">
+                    <h3 class="text-xl font-bold text-gray-800 mb-2">
+                      {post.title}
+                    </h3>
+                    <ul class="flex items-center text-sm text-gray-500 mb-4 space-x-3">
+                      <li>{new Date(post.date).toLocaleDateString()}</li>
+                      <li class="list-disc ml-4">{post.author}</li>
+                    </ul>
+                    <div
+                      set:html={post.excerpt}
+                      class="text-gray-700 text-base mb-4"
+                    />
+                    <a
+                      href={`/noticias/${post.slug}`}
+                      class="inline-block text-blue-600 hover:text-blue-800 font-medium transition-colors duration-200"
+                    >
+                      Ver mas informacion &rarr;
+                    </a>
+                  </div>
+                </article>
+              );
+            })
+          ) : (
+            <p class="text-gray-600 text-center col-span-full">
+              No hay publicaciones en la categoría de Noticias.
+            </p>
+          )
         }
       </div>
     </section>

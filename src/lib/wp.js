@@ -55,3 +55,46 @@ export const getLastPost = async ({ perPage = 10 }) => {
   });
   return posts;
 };
+
+
+
+
+
+
+
+export const getPostsByCategory = async (categoryId, { perPage = 10 } = {}) => {
+  try {
+    const response = await fetch(
+      `${requestUrl}/posts?categories=${categoryId}&per_page=${perPage}&_embed`
+    );
+
+    if (!response.ok) {
+      throw new Error(`Error fetching posts for category ID ${categoryId}: ${response.statusText}`);
+    }
+
+    const results = await response.json();
+    if (!results.length) {
+      console.warn(`No posts found for category ID: ${categoryId}`);
+      return []; // Return an empty array if no posts are found
+    }
+
+    const posts = results.map((post) => {
+      const {
+        title: { rendered: title },
+        content: { rendered: content },
+        excerpt: { rendered: excerpt },
+        date,
+        slug,
+      } = post;
+
+      const featuredImage = post._embedded?.["wp:featuredmedia"]?.[0]?.source_url || null;
+      const author = post._embedded?.author?.[0]?.name || "Unknown Author";
+
+      return { title, content, excerpt, date, slug, author, featuredImage };
+    });
+    return posts;
+  } catch (error) {
+    console.error("Error in getPostsByCategory:", error);
+    throw error;
+  }
+};
