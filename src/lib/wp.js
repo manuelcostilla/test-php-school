@@ -17,6 +17,7 @@ export const getPageInfo = async (slug) => {
 // conseguir la informacion de los post
 export const getPostInfo = async (slug) => {
   const response = await fetch(`${requestUrl}/posts?slug=${slug}`);
+  console.log(response)
   if (!response.ok) throw new Error("error");
   const [data] = await response.json();
   const {
@@ -47,9 +48,8 @@ export const getLastPost = async ({ perPage = 10 }) => {
       slug,
     } = post;
 
-    const featuredImage = post._embedded["wp:featuredmedia"][0].source_url;
-    const author = post._embedded.author[0].name;
-    console.log(author);
+      const featuredImage = post._embedded?.["wp:featuredmedia"]?.[0]?.source_url || null;
+      const author = post._embedded?.author?.[0]?.name || "Unknown Author";
 
     return { title, content, excerpt, date, slug, author, featuredImage };
   });
@@ -75,7 +75,7 @@ export const getPostsByCategory = async (categoryId, { perPage = 10 } = {}) => {
     const results = await response.json();
     if (!results.length) {
       console.warn(`No posts found for category ID: ${categoryId}`);
-      return []; // Return an empty array if no posts are found
+      return []; 
     }
 
     const posts = results.map((post) => {
@@ -94,7 +94,7 @@ export const getPostsByCategory = async (categoryId, { perPage = 10 } = {}) => {
     });
     return posts;
   } catch (error) {
-    console.error("Error in getPostsByCategory:", error);
+    console.error("Error getPostsByCategory:", error);
     throw error;
   }
 };
