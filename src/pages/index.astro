@@ -1,6 +1,9 @@
 ---
 import Layout from "../layouts/Layout.astro";
+
 import { getPageInfo, getLastPost, getPostsByCategory } from "../lib/wp";
+
+import Banner from "../components/banner.astro";
 
 const { title, content } = await getPageInfo("inicio");
 
@@ -20,6 +23,7 @@ const eventosPosts = await getPostsByCategory(EVENTOS_CATEGORY_ID, {
 ---
 
 <Layout>
+  <Banner />
   <main class="container mx-auto px-4 py-8">
     <section class="mb-12">
       <h1 class="text-4xl font-bold text-gray-800 mb-4">{title}</h1>

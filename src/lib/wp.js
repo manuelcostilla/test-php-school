@@ -1,4 +1,4 @@
-const domain = "http://localhost:8881";
+const domain = "https://delicately0e0b72c485-aslgy-studio.wp.build";
 const requestUrl = `${domain}/wp-json/wp/v2`;
 
 // conseguir la informacion de las pages
