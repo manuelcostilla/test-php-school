@@ -1,5 +1,6 @@
 ---
 import Layout from "../layouts/Layout.astro";
+
 import { getPageInfo, getLastPost, getPostsByCategory } from "../lib/wp";
 
 const { id: pageId, title, content } = await getPageInfo("inicio");
