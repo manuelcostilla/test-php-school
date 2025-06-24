@@ -2,7 +2,7 @@
 import Layout from "../layouts/Layout.astro";
 import { getPageInfo, getLastPost, getPostsByCategory } from "../lib/wp";
 
-const { title, content } = await getPageInfo("inicio");
+const { id: pageId, title, content } = await getPageInfo("inicio");
 
 const latestPosts = await getLastPost({ perPage: 3 });
 
@@ -18,6 +18,18 @@ const eventosPosts = await getPostsByCategory(EVENTOS_CATEGORY_ID, {
   perPage: 6,
 });
 ---
+
+<head>
+  <link
+    rel="stylesheet"
+    href="http://localhost:8881/wp-content/plugins/elementor/assets/css/frontend.css"
+  />
+  <link
+    rel="stylesheet"
+    href={`http://localhost:8881/wp-content/uploads/elementor/css/post-${pageId}.css`}
+  />
+  <meta charset="UTF-8" />
+</head>
 
 <Layout>
   <main class="container mx-auto px-4 py-8">

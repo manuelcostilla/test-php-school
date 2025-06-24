@@ -8,16 +8,17 @@ export const getPageInfo = async (slug) => {
   if (!response.ok) throw new Error("error");
   const [data] = await response.json();
   const {
+    id,
     title: { rendered: title },
     content: { rendered: content },
   } = data;
-  return { title, content };
+  return { id, title, content };
 };
 
 // conseguir la informacion de los post
 export const getPostInfo = async (slug) => {
   const response = await fetch(`${requestUrl}/posts?slug=${slug}`);
-  console.log(response)
+  console.log(response);
   if (!response.ok) throw new Error("error");
   const [data] = await response.json();
   const {
@@ -48,19 +49,14 @@ export const getLastPost = async ({ perPage = 10 }) => {
       slug,
     } = post;
 
-      const featuredImage = post._embedded?.["wp:featuredmedia"]?.[0]?.source_url || null;
-      const author = post._embedded?.author?.[0]?.name || "Unknown Author";
+    const featuredImage =
+      post._embedded?.["wp:featuredmedia"]?.[0]?.source_url || null;
+    const author = post._embedded?.author?.[0]?.name || "Unknown Author";
 
     return { title, content, excerpt, date, slug, author, featuredImage };
   });
   return posts;
 };
-
-
-
-
-
-
 
 export const getPostsByCategory = async (categoryId, { perPage = 10 } = {}) => {
   try {
@@ -69,13 +65,15 @@ export const getPostsByCategory = async (categoryId, { perPage = 10 } = {}) => {
     );
 
     if (!response.ok) {
-      throw new Error(`Error fetching posts for category ID ${categoryId}: ${response.statusText}`);
+      throw new Error(
+        `Error fetching posts for category ID ${categoryId}: ${response.statusText}`
+      );
     }
 
     const results = await response.json();
     if (!results.length) {
       console.warn(`No posts found for category ID: ${categoryId}`);
-      return []; 
+      return [];
     }
 
     const posts = results.map((post) => {
@@ -87,7 +85,8 @@ export const getPostsByCategory = async (categoryId, { perPage = 10 } = {}) => {
         slug,
       } = post;
 
-      const featuredImage = post._embedded?.["wp:featuredmedia"]?.[0]?.source_url || null;
+      const featuredImage =
+        post._embedded?.["wp:featuredmedia"]?.[0]?.source_url || null;
       const author = post._embedded?.author?.[0]?.name || "Unknown Author";
 
       return { title, content, excerpt, date, slug, author, featuredImage };
