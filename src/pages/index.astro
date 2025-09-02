@@ -1,38 +1,55 @@
 ---
 import Layout from "../layouts/Layout.astro";
-
+import PostCard from "../components/PostCard.astro";
 import { getPageInfo, getLastPost, getPostsByCategory } from "../lib/wp";
 
 const { id: pageId, title, content } = await getPageInfo("inicio");
 
 const latestPosts = await getLastPost({ perPage: 3 });
 
-const NOTICIAS_CATEGORY_ID = 1;
-
-const noticiasPosts = await getPostsByCategory(NOTICIAS_CATEGORY_ID, {
-  perPage: 6,
-});
-
-const EVENTOS_CATEGORY_ID = 3;
-
-const eventosPosts = await getPostsByCategory(EVENTOS_CATEGORY_ID, {
-  perPage: 6,
-});
+// Definimos las categorías que queremos mostrar
+const categories = {
+  noticias: {
+    id: 9,
+    title: "Noticias",
+    posts: await getPostsByCategory(9, { perPage: 6 }),
+  },
+  eventos: {
+    id: 3,
+    title: "Eventos",
+    posts: await getPostsByCategory(3, { perPage: 6 }),
+  },
+  clic: {
+    id: 8,
+    title: "CLIC",
+    posts: await getPostsByCategory(8, { perPage: 6 }),
+  },
+  centroUniversitario: {
+    id: 7,
+    title: "Centro Universitario",
+    posts: await getPostsByCategory(7, { perPage: 6 }),
+  },
+};
 ---
 
 <head>
   <link
     rel="stylesheet"
-    href="http://localhost:8881/wp-content/plugins/elementor/assets/css/frontend.css"
+    href="https://clic.baradero.gob.ar/wp-content/plugins/elementor/assets/css/frontend.css"
   />
   <link
     rel="stylesheet"
-    href={`http://localhost:8881/wp-content/uploads/elementor/css/post-${pageId}.css`}
+    href={`https://clic.baradero.gob.ar/wp-content/uploads/elementor/css/post-${pageId}.css`}
   />
   <meta charset="UTF-8" />
+  <script src="https://clic.baradero.gob.ar/wp-includes/js/jquery/jquery.min.js" is:inline></script>
+  <script src="https://clic.baradero.gob.ar/wp-content/plugins/elementor/assets/js/frontend.min.js" is:inline></script>
+  <link rel="stylesheet" href="https://clic.baradero.gob.ar/wp-content/plugins/elementor/assets/lib/eicons/css/elementor-icons.min.css" />
+  <link rel="stylesheet" href="https://clic.baradero.gob.ar/wp-content/uploads/elementor/css/global.css" />
 </head>
 
 <Layout>
+
   <main class="container mx-auto px-4 py-8">
     <section class="mb-12">
       <h1 class="text-4xl font-bold text-gray-800 mb-4">{title}</h1>
@@ -45,136 +62,56 @@ const eventosPosts = await getPostsByCategory(EVENTOS_CATEGORY_ID, {
     <hr class="border-gray-200 my-12" />
 
     <section>
-      <h2 class="text-3xl font-semibold text-gray-800 mb-8">Latest Posts</h2>
+      <h2 class="text-3xl font-semibold text-gray-800 mb-8">Últimas publicaciones</h2>
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
         {
-          latestPosts.map((post: any) => {
-            return (
-              <article class="bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300 overflow-hidden">
-                {post.featuredImage && (
-                  <img
-                    src={post.featuredImage}
-                    alt={post.title}
-                    class="w-full h-48 object-cover"
-                  />
-                )}
-                <div class="p-6">
-                  <h3 class="text-xl font-bold text-gray-800 mb-2">
-                    {post.title}
-                  </h3>
-                  <ul class="flex items-center text-sm text-gray-500 mb-4 space-x-3">
-                    <li>{new Date(post.date).toLocaleDateString()}</li>
-                    <li class="list-disc ml-4">{post.author}</li>
-                  </ul>
-                  <div
-                    set:html={post.excerpt}
-                    class="text-gray-700 text-base mb-4"
-                  />
-                  <a
-                    href={`/noticias/${post.slug}`}
-                    class="inline-block text-blue-600 hover:text-blue-800 font-medium transition-colors duration-200"
-                  >
-                    Ver mas informacion &rarr;
-                  </a>
-                </div>
-              </article>
-            );
-          })
+          latestPosts.map((post: any) => (
+            <PostCard post={post} />
+          ))
         }
       </div>
     </section>
 
     <hr class="border-gray-200 my-12" />
 
-    <section>
-      <h2 class="text-3xl font-semibold text-gray-800 mb-8">Noticias</h2>
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-        {
-          noticiasPosts.length > 0 ? (
-            noticiasPosts.map((post: any) => {
-              return (
-                <article class="bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300 overflow-hidden">
-                  {post.featuredImage && (
-                    <img
-                      src={post.featuredImage}
-                      alt={post.title}
-                      class="w-full h-48 object-cover"
-                    />
-                  )}
-                  <div class="p-6">
-                    <h3 class="text-xl font-bold text-gray-800 mb-2">
-                      {post.title}
-                    </h3>
-                    <ul class="flex items-center text-sm text-gray-500 mb-4 space-x-3">
-                      <li>{new Date(post.date).toLocaleDateString()}</li>
-                      <li class="list-disc ml-4">{post.author}</li>
-                    </ul>
-                    <div
-                      set:html={post.excerpt}
-                      class="text-gray-700 text-base mb-4"
-                    />
-                    <a
-                      href={`/noticias/${post.slug}`}
-                      class="inline-block text-blue-600 hover:text-blue-800 font-medium transition-colors duration-200"
-                    >
-                      Ver mas informacion &rarr;
-                    </a>
-                  </div>
-                </article>
-              );
-            })
-          ) : (
-            <p class="text-gray-600 text-center col-span-full">
-              No hay publicaciones en la categoría de Noticias.
-            </p>
-          )
-        }
-      </div>
-    </section>
-    <section>
-      <h2 class="text-3xl font-semibold text-gray-800 mb-8">Eventos</h2>
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-        {
-          eventosPosts.length > 0 ? (
-            eventosPosts.map((post: any) => {
-              return (
-                <article class="bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300 overflow-hidden">
-                  {post.featuredImage && (
-                    <img
-                      src={post.featuredImage}
-                      alt={post.title}
-                      class="w-full h-48 object-cover"
-                    />
-                  )}
-                  <div class="p-6">
-                    <h3 class="text-xl font-bold text-gray-800 mb-2">
-                      {post.title}
-                    </h3>
-                    <ul class="flex items-center text-sm text-gray-500 mb-4 space-x-3">
-                      <li>{new Date(post.date).toLocaleDateString()}</li>
-                      <li class="list-disc ml-4">{post.author}</li>
-                    </ul>
-                    <div
-                      set:html={post.excerpt}
-                      class="text-gray-700 text-base mb-4"
-                    />
-                    <a
-                      href={`/noticias/${post.slug}`}
-                      class="inline-block text-blue-600 hover:text-blue-800 font-medium transition-colors duration-200"
-                    >
-                      Ver mas informacion &rarr;
-                    </a>
-                  </div>
-                </article>
-              );
-            })
-          ) : (
-            <p class="text-gray-600 text-center col-span-full">
-              No hay publicaciones en la categoría de Noticias.
-            </p>
-          )
-        }
-      </div>
-    </section>
+    {
+      Object.entries(categories).map(([key, category]) => (
+        <section class="mt-8">
+          <h2 class="text-3xl font-semibold text-gray-800 mb-8">{category.title}</h2>
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {
+              category.posts.length > 0 ? (
+                category.posts.map((post: any) => (
+                  <PostCard post={post} />
+                ))
+              ) : (
+                <p class="text-gray-600 text-center col-span-full">
+                  No hay publicaciones en la categoría de {category.title}.
+                </p>
+              )
+            }
+          </div>
+          <hr class="border-gray-200 my-12" />
+        </section>
+      ))
+    }
   </main>
+<style is:global>
+  h2 {
+    color: #2B72AC !important;
+  }
+  .elementor-button{
+    background-color: #2B72AC;
+  }
+  .elementor-button:hover{
+    background-color: #185688;
+  }
+  
+  .elementor-element.elementor-element-745a25a {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+</style>
 </Layout>

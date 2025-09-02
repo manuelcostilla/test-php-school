@@ -6,7 +6,7 @@ import { getPageInfo, getPostsByCategory } from "../lib/wp";
 const { id: pageId } = await getPageInfo("inicio");
 
 // ⚡ Traemos más de 20 posts para poder paginar (ej: 100)
-const posts = await getPostsByCategory(8, { perPage: 100 });
+const posts = await getPostsByCategory(7, { perPage: 100 });
 const pageSize = 20;
 const totalPages = Math.ceil(posts.length / pageSize);
 ---
@@ -14,7 +14,7 @@ const totalPages = Math.ceil(posts.length / pageSize);
 <Layout>
   <main class="container mx-auto px-4 py-8">
     <section class="mt-8">
-      <h2 class="text-3xl font-semibold text-gray-800 mb-8">CLIC</h2>
+      <h2 class="text-3xl font-semibold text-gray-800 mb-8">CENTRO UNIVERSTARIO</h2>
 
       <!-- Contenedor con estado -->
       <div x-data="{ page: 1 }" class="space-y-8">

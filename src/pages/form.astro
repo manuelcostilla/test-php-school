@@ -1,0 +1,160 @@
+---
+import Layout from "../layouts/Layout.astro";
+import { getPageInfo } from "../lib/wp";
+const { id: pageId, title, content } = await getPageInfo("inscripcion");
+---
+
+<head>
+  <link
+    rel="stylesheet"
+    href="https://clic.baradero.gob.ar/wp-content/plugins/elementor/assets/css/frontend.css"
+  />
+  <link
+    rel="stylesheet"
+    href={`https://clic.baradero.gob.ar/wp-content/uploads/elementor/css/post-${pageId}.css`}
+  />
+  <meta charset="UTF-8" />
+  <script src="https://clic.baradero.gob.ar/wp-includes/js/jquery/jquery.min.js" is:inline></script>
+  <script src="https://clic.baradero.gob.ar/wp-content/plugins/elementor/assets/js/frontend.min.js" is:inline></script>
+  <link rel="stylesheet" href="https://clic.baradero.gob.ar/wp-content/uploads/elementor/css/global.css" />
+  <link rel="stylesheet" href="https://clic.baradero.gob.ar/wp-content/plugins/contact-form-7/includes/css/styles.css" />
+  
+  <style is:global>
+    /* Estilos personalizados para el formulario de inscripción 
+      El selector `.wpcf7` es el contenedor principal del formulario de Contact Form 7.
+    */
+    .wpcf7 {
+      max-width: 600px;
+      margin: 40px auto;
+      padding: 30px;
+      background-color: #ffffff;
+      border-radius: 10px;
+      box-shadow: 0 5px 25px rgba(0, 0, 0, 0.1);
+      font-family: 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    }
+
+    /* Etiqueta y campo de entrada */
+    .wpcf7 p {
+      margin-bottom: 20px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .wpcf7 label {
+      font-weight: 600;
+      color: #555;
+      margin-bottom: 8px;
+      font-size: 16px;
+    }
+
+    /* Campos de texto, email y teléfono */
+    .wpcf7-form-control:not(.wpcf7-submit) {
+      width: 100%;
+      padding: 12px 15px;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      font-size: 16px;
+      color: #333;
+      transition: border-color 0.3s, box-shadow 0.3s;
+    }
+
+    .wpcf7-form-control:not(.wpcf7-submit):focus {
+      border-color: #007bff;
+      box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.25);
+      outline: none;
+    }
+
+    /* Botón de envío */
+    .wpcf7-submit {
+      width: 100%;
+      padding: 15px;
+      background-color: #007bff;
+      color: white;
+      font-size: 18px;
+      font-weight: bold;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background-color 0.3s, transform 0.2s;
+    }
+
+    .wpcf7-submit:hover {
+      background-color: #0056b3;
+      transform: translateY(-2px);
+    }
+
+    .wpcf7-submit:active {
+        background-color: #004085;
+        transform: translateY(0);
+    }
+
+    /* Mensajes de validación y estado */
+    .wpcf7-response-output {
+        margin-top: 20px;
+        padding: 15px;
+        border-radius: 8px;
+        text-align: center;
+        font-weight: bold;
+        font-size: 16px;
+    }
+
+    .wpcf7-mail-sent-ok {
+        background-color: #e6f7e6;
+        color: #1a7e1a;
+        border-color: #1a7e1a;
+    }
+
+    .wpcf7-validation-errors, .wpcf7-mail-sent-ng {
+        background-color: #f7e6e6;
+        color: #7e1a1a;
+        border-color: #7e1a1a;
+    }
+
+  </style>
+</head>
+
+<Layout>
+  <main>
+    <h1 set:html={title} />
+    <Fragment set:html={content} />
+  </main>
+</Layout>
+
+<script>
+  const form = document.querySelector('.wpcf7-form');
+
+  if (form) {
+    form.addEventListener('submit', async (event) => {
+      event.preventDefault();
+
+      const formData = new FormData(form);
+      const formProps = Object.fromEntries(formData);
+      
+      const formId = "166b2db"; 
+      const apiUrl = `https://clic.baradero.gob.ar/wp-json/contact-form-7/v1/contact-forms/${formId}/feedback`;
+      
+      try {
+        const response = await fetch(apiUrl, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(formProps),
+        });
+
+        const result = await response.json();
+
+        if (response.ok) {
+          console.log('Formulario enviado con éxito:', result);
+          alert('¡Gracias por inscribirte!');
+        } else {
+          console.error('Error al enviar el formulario:', result);
+          alert('Hubo un error al enviar tu inscripción. Por favor, inténtalo de nuevo.');
+        }
+      } catch (error) {
+        console.error('Error de red:', error);
+        alert('Hubo un problema de conexión. Por favor, verifica tu internet e inténtalo de nuevo.');
+      }
+    });
+  }
+</script>

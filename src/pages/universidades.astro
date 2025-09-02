@@ -1,0 +1,82 @@
+---
+import Layout from "../layouts/Layout.astro";
+import PostCard from "../components/PostCard.astro";
+import { getPageInfo, getLastPost, getPostsByCategory } from "../lib/wp";
+
+const { id: pageId, title, content } = await getPageInfo("universidades");
+
+const latestPosts = await getLastPost({ perPage: 3 });
+
+// Definimos las categorías que queremos mostrar
+const categories = {
+  centroUniversitario: {
+    id: 12,
+    posts: await getPostsByCategory(12, { perPage: 6 }),
+  }
+};
+---
+<head>
+  <link
+    rel="stylesheet"
+    href="https://clic.baradero.gob.ar/wp-content/plugins/elementor/assets/css/frontend.css"
+  />
+  <link
+    rel="stylesheet"
+    href={`https://clic.baradero.gob.ar/wp-content/uploads/elementor/css/post-${pageId}.css`}
+  />
+  <link
+    rel="stylesheet"
+    href="https://clic.baradero.gob.ar/wp-content/plugins/elementor/assets/lib/eicons/css/elementor-icons.min.css"
+  />
+  <link
+    rel="stylesheet"
+    href="https://clic.baradero.gob.ar/wp-content/uploads/elementor/css/global.css"
+  />
+</head>
+
+<Layout>
+  <main class="container mx-auto px-4 py-8">
+    <section class="mb-12">
+      <h1 class="text-4xl font-bold text-gray-800 mb-4">{title}</h1>
+      <div
+        set:html={content}
+        class="prose lg:prose-lg text-gray-700 leading-relaxed"
+      />
+    </section>
+  </main>
+
+      {
+      Object.entries(categories).map(([key, category]) => (
+        <section class="mt-8">
+          <h2 class="text-3xl font-semibold text-gray-800 mb-8">{category.title}</h2>
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {
+              category.posts.length > 0 ? (
+                category.posts.map((post: any) => (
+                  <PostCard post={post} />
+                ))
+              ) : (
+                <p class="text-gray-600 text-center col-span-full">
+                  No hay publicaciones en la categoría de {category.title}.
+                </p>
+              )
+            }
+          </div>
+          <hr class="border-gray-200 my-12" />
+        </section>
+      ))
+    }
+
+  <style is:global>
+    h1 {
+      color: #2B72AC !important;
+    }
+    .elementor-button {
+      background-color: #2B72AC;
+    }
+    .elementor-button:hover {
+      background-color: #185688;
+    }
+    
+  </style>
+</Layout>

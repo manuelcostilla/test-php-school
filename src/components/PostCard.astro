@@ -1,0 +1,31 @@
+---
+const { post } = Astro.props;
+---
+<article class="bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300 overflow-hidden">
+  {post.featuredImage && (
+    <img
+      src={post.featuredImage}
+      alt={post.title}
+      class="w-full h-48 object-cover"
+    />
+  )}
+  <div class="p-6">
+    <h3 class="text-xl font-bold text-gray-800 mb-2">
+      {post.title}
+    </h3>
+    <ul class="flex items-center text-sm text-gray-500 mb-4 space-x-3">
+      <li>{new Date(post.date).toLocaleDateString()}</li>
+      <li class="list-disc ml-4">{post.author}</li>
+    </ul>
+    <div
+      set:html={post.excerpt}
+      class="text-gray-700 text-base mb-4"
+    />
+    <a
+      href={`/noticias/${post.slug}`}
+      class="inline-block text-blue-600 hover:text-blue-800 font-medium transition-colors duration-200"
+    >
+      Ver mas informacion &rarr;
+    </a>
+  </div>
+</article>
