@@ -26,16 +26,29 @@ export const getPageInfo = async (slug) => {
 // conseguir la informacion de los post
 export const getPostInfo = async (slug) => {
   try {
-    const response = await fetch(`${requestUrl}/posts?slug=${slug}`);
-    console.log(response);
-    if (!response.ok)
+    // Pedimos también los embeds para que incluya la imagen
+    const response = await fetch(`${requestUrl}/posts?slug=${slug}&_embed`);
+    if (!response.ok) {
       throw new Error(`Error en getPostInfo: ${response.statusText}`);
-    const [data] = await response.json();
+    }
+
+    const results = await response.json();
+    if (!results.length) {
+      console.warn(`No se encontró ningún post con slug: ${slug}`);
+      return null;
+    }
+
+    const post = results[0];
     const {
       title: { rendered: title },
       content: { rendered: content },
-    } = data;
-    return { title, content };
+    } = post;
+
+    // Imagen destacada
+    const featuredImage =
+      post._embedded?.["wp:featuredmedia"]?.[0]?.source_url || null;
+
+    return { title, content, featuredImage };
   } catch (error) {
     console.error("Error en getPostInfo:", error);
     return null;

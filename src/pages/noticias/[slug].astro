@@ -1,19 +1,28 @@
 ---
 import Layout from "../../layouts/Layout.astro";
-
 import { getPostInfo } from "../../lib/wp";
 
 const slug = Astro.params.slug;
-console.log("Slug being used:", slug);
 
 if (!slug) return Astro.redirect("/404");
 
 export const prerender = false;
 
-const { title, content } = await getPostInfo(slug);
+const post = await getPostInfo(slug);
+
+if (!post) {
+  return Astro.redirect("/404");
+}
+
+const { title, content, featuredImage } = post;
 ---
 
 <Layout>
   <h1>{title}</h1>
+
+  {featuredImage && (
+    <img src={featuredImage} alt={title} class="w-full h-auto mb-4 rounded-lg" />
+  )}
+
   <div set:html={content} class="pl-5" />
 </Layout>

@@ -4,6 +4,7 @@
   "version": "0.0.1",
   "scripts": {
     "dev": "cross-env NODE_TLS_REJECT_UNAUTHORIZED=0 astro dev",
+    "prebuild": "node scripts/fetch-elementor-css.js",
     "build": "astro build",
     "preview": "astro preview",
     "astro": "astro"
@@ -16,4 +17,5 @@
   "devDependencies": {
     "cross-env": "^10.0.0"
   }
+  
 }

@@ -1,7 +1,15 @@
 ---
 const { post } = Astro.props;
+
+function getExcerpt(html, length = 150) {
+  const text = html.replace(/<[^>]+>/g, '');
+  return text.length > length ? text.slice(0, length) + "..." : text;
+}
 ---
-<article class="bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300 overflow-hidden">
+
+<article 
+  class="bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300 overflow-hidden"
+>
   {post.featuredImage && (
     <img
       src={post.featuredImage}
@@ -17,15 +25,14 @@ const { post } = Astro.props;
       <li>{new Date(post.date).toLocaleDateString()}</li>
       <li class="list-disc ml-4">{post.author}</li>
     </ul>
-    <div
-      set:html={post.excerpt}
-      class="text-gray-700 text-base mb-4"
-    />
+    <p class="text-gray-700 text-base mb-4">
+      {getExcerpt(post.content, 150)}
+    </p>
     <a
       href={`/noticias/${post.slug}`}
       class="inline-block text-blue-600 hover:text-blue-800 font-medium transition-colors duration-200"
     >
-      Ver mas informacion &rarr;
+      Ver más información &rarr;
     </a>
   </div>
 </article>
