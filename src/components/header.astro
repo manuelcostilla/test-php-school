@@ -1,51 +1,20 @@
 ---
-import Layout from "../layouts/Layout.astro";
 ---
-
-<layout>
-  <header class="h-24 bg-[#4b4b4d] flex justify-between items-center">
-    <img class="w-[190px] h-20 ml-10" src="./logo.png" />
-    <nav class="flex justify-center items-center">
-      <a
-        href="/"
-        class="text-white font-['system-ui',_'-apple-system',_'BlinkMacSystemFont',_'Segoe_UI',_'Roboto',_'Oxygen',_'Ubuntu',_'Cantarell',_'Open_Sans',_'Helvetica_Neue',_sans-serif] font-semibold mr-6 text-xl cursor-pointer transition duration-200 no-underline hover:text-gray-200"
-        >INICIO</a
-      >
-      <a
-        href="/universidades"
-        class="text-white font-['system-ui',_'-apple-system',_'BlinkMacSystemFont',_'Segoe_UI',_'Roboto',_'Oxygen',_'Ubuntu',_'Cantarell',_'Open_Sans',_'Helvetica_Neue',_sans-serif] font-semibold mr-6 text-xl cursor-pointer transition duration-200 no-underline hover:text-gray-200"
-        >UNIVERSIDADES</a
-      >
-      <a
-        href="/centrouniversitario"
-        class="text-white font-['system-ui',_'-apple-system',_'BlinkMacSystemFont',_'Segoe_UI',_'Roboto',_'Oxygen',_'Ubuntu',_'Cantarell',_'Open_Sans',_'Helvetica_Neue',_sans-serif] font-semibold mr-6 text-xl cursor-pointer transition duration-200 no-underline hover:text-gray-200"
-        >CUB</a
-      >
-      <a
-        href="/clic"
-        class="text-white font-['system-ui',_'-apple-system',_'BlinkMacSystemFont',_'Segoe_UI',_'Roboto',_'Oxygen',_'Ubuntu',_'Cantarell',_'Open_Sans',_'Helvetica_Neue',_sans-serif] font-semibold mr-6 text-xl cursor-pointer transition duration-200 no-underline hover:text-gray-200"
-        >CLIC</a
-      >
-      <a
-        href="/noticias"
-        class="text-white font-['system-ui',_'-apple-system',_'BlinkMacSystemFont',_'Segoe_UI',_'Roboto',_'Oxygen',_'Ubuntu',_'Cantarell',_'Open_Sans',_'Helvetica_Neue',_sans-serif] font-semibold mr-6 text-xl cursor-pointer transition duration-200 no-underline hover:text-gray-200"
-        >NOTICIAS</a
-      >
-      <a
-        href="#"
-        class="text-white font-['system-ui',_'-apple-system',_'BlinkMacSystemFont',_'Segoe_UI',_'Roboto',_'Oxygen',_'Ubuntu',_'Cantarell',_'Open_Sans',_'Helvetica_Neue',_sans-serif] font-semibold mr-6 text-xl cursor-pointer transition duration-200 no-underline hover:text-gray-200"
-        >EVENTOS</a
-      >
-      <div
-        class="ml-6 w-[220px] h-24 flex justify-center items-center cursor-pointer transition duration-200 hover:bg-[#636363]"
-      >
-        <a
-        href="/form"
-          class="text-white font-['system-ui',_'-apple-system',_'BlinkMacSystemFont',_'Segoe_UI',_'Roboto',_'Oxygen',_'Ubuntu',_'Cantarell',_'Open_Sans',_'Helvetica_Neue',_sans-serif] font-semibold text-xl no-underline"
-        >
-          INSCRIPCIONES
-        </a>
-      </div>
-    </nav>
-  </header>
-</layout>
+<div class="h-24 bg-[#4b4b4d] flex items-center px-6">
+  <img class="h-[90px] w-[140px] mr-8 flex-shrink-0" src="./logo.png" alt="Logo de Clic Baradero" />
+  <nav id="navbar-links" class="flex items-center gap-4 whitespace-nowrap overflow-hidden">
+    <a href="/" class="text-white text-sm font-semibold px-[20px] py-[6px] rounded-md hover:bg-[#606062] transition-colors duration-200">INICIO</a>
+    <a href="/universidades" class="text-white text-sm font-semibold px-[20px] py-[6px] rounded-md hover:bg-[#606062] transition-colors duration-200">UNIVERSIDADES</a>
+    <a href="/centrouniversitario" class="text-white text-sm font-semibold px-[20px] py-[6px] rounded-md hover:bg-[#606062] transition-colors duration-200">CUB</a>
+    <a href="/clic" class="text-white text-sm font-semibold px-[20px] py-[6px] rounded-md hover:bg-[#606062] transition-colors duration-200">CLIC</a>
+    <a href="/fines" class="text-white text-sm font-semibold px-[20px] py-[6px] rounded-md hover:bg-[#606062] transition-colors duration-200">FINES</a>
+    <a href="/contac" class="text-white text-sm font-semibold px-[20px] py-[6px] rounded-md hover:bg-[#606062] transition-colors duration-200">CONTACTANOS</a>
+    <a href="/noticias" class="text-white text-sm font-semibold px-[25px] py-[6px] rounded-md hover:bg-[#606062] transition-colors duration-200">NOTICIAS</a>
+    <a href="/eventos" class="text-white text-sm font-semibold px-[25px] py-[6px] rounded-md hover:bg-[#606062] transition-colors duration-200">EVENTOS</a>
+    <a href="/form" class="text-white text-sm font-semibold px-[25px] py-[6px] rounded-md hover:bg-[#606062] transition-colors duration-200">INSCRIPCIONES</a>
+    <a href="/sob-nosotros" class="text-white text-sm font-semibold px-[20px] py-[6px] rounded-md hover:bg-[#606062] transition-colors duration-200">SOBRE NOSOTROS</a>
+    <a href="/producciones-alumnos" class="text-white text-sm font-semibold px-[20px] py-[6px] rounded-md hover:bg-[#606062] transition-colors duration-200">PRODUCCIONES ALUMNOS</a>
+    <a href="/afiliacion-municipal" class="text-white text-sm font-semibold px-[25px] py-[6px] rounded-md hover:bg-[#606062] transition-colors duration-200">AFILIACION MUNICIPAL</a>
+  </nav>
+</div>
+</header>

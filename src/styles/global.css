@@ -1,1 +1,9 @@
 @import "tailwindcss";
+
+#navbar-links a {
+  color: white !important;
+}
+
+#navbar-links a:hover {
+  background-color: #606062 !important;
+}

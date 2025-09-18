@@ -10,12 +10,13 @@
     "astro": "astro"
   },
   "dependencies": {
+    "@astrojs/vercel": "^8.2.7",
     "@tailwindcss/vite": "^4.1.8",
     "astro": "^5.8.1",
+    "jsdom": "^27.0.0",
     "tailwindcss": "^4.1.8"
   },
   "devDependencies": {
     "cross-env": "^10.0.0"
   }
-  
 }

@@ -1,55 +1,45 @@
 ---
+import { getPageInfo } from "../lib/wp";
+import Header from "../components/header.astro";
+import Footer from "../components/footer.astro"; // Asegúrate de crear este componente
 import Layout from "../layouts/Layout.astro";
-import PostCard from "../components/PostCard.astro";
-import { getPageInfo, getPostsByCategory } from "../lib/wp";
 
-const { id: pageId } = await getPageInfo("inicio");
+const { id: pageId, title } = await getPageInfo("elementor-117");
+const pageUrl = 'https://clic.baradero.gob.ar/elementor-117/';
+const response = await fetch(pageUrl);
+const pageHtml = await response.text();
 
-// ⚡ Traemos más de 20 posts para poder paginar (ej: 100)
-const posts = await getPostsByCategory(8, { perPage: 100 });
-const pageSize = 20;
-const totalPages = Math.ceil(posts.length / pageSize);
+// Usamos expresiones regulares para eliminar el <header> y el <footer>.
+// Mantenemos los scripts ya que son necesarios para los estilos.
+let content = pageHtml.replace(/<header[\s\S]*?<\/header>/g, '');
+content = content.replace(/<footer[\s\S]*?<\/footer>/g, '');
+
 ---
 
-<Layout>
-  <main class="container mx-auto px-4 py-8">
-    <section class="mt-8">
-      <h2 class="text-3xl font-semibold text-gray-800 mb-8">CLIC</h2>
+<html lang="es">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{title}</title>
+    <link rel="stylesheet" href="https://clic.baradero.gob.ar/wp-content/plugins/elementor/assets/css/frontend.min.css"/>
+    <link rel="stylesheet" href="https://clic.baradero.gob.ar/wp-content/themes/astra/assets/css/minified/main.min.css"/>
+    <link rel="stylesheet" href="https://clic.baradero.gob.ar/wp-content/uploads/elementor/css/global.css"/>
+    <link rel="stylesheet" href={`https://clic.baradero.gob.ar/wp-content/uploads/elementor/css/post-${pageId}.css`}/>
+    <link rel="stylesheet" href="https://clic.baradero.gob.ar/wp-content/uploads/elementor/css/post-9.css"/>
+    <link rel='stylesheet' id='widget-divider-css' href='https://clic.baradero.gob.ar/wp-content/plugins/elementor/assets/css/widget-divider.min.css?ver=3.31.5' media='all' />
+    <link rel="stylesheet" href="https://clic.baradero.gob.ar/wp-content/plugins/elementor/assets/lib/eicons/css/elementor-icons.min.css"/>
+    <link rel="stylesheet" href="https://clic.baradero.gob.ar/wp-content/uploads/elementor/google-fonts/css/roboto.css"/>
+    <link rel="stylesheet" href="https://clic.baradero.gob.ar/wp-content/uploads/elementor/google-fonts/css/robotoslab.css"/>
+</head>
 
-      <!-- Contenedor con estado -->
-      <div x-data="{ page: 1 }" class="space-y-8">
-        <!-- Posts -->
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {
-            posts.map((post: any, i: number) => (
-              <div
-                x-show={`page === ${Math.floor(i / pageSize) + 1}`}
-                x-transition
-              >
-                <PostCard post={post} />
-              </div>
-            ))
-          }
-        </div>
+<body>
+    <Layout title={title}>
+    <Header slot="header" />
+    <div set:html={content} />
+    <Footer slot="footer" />
+    </Layout>
 
-        <!-- Controles de paginación -->
-        <div class="flex justify-center gap-2 mt-6">
-          {
-            Array.from({ length: totalPages }).map((_, i) => (
-              <button
-                x-on:click={`page = ${i + 1}`}
-                class="px-3 py-1 rounded-lg border"
-                :class="{ 'bg-blue-600 text-white': page === (i+1), 'bg-gray-100': page !== (i+1) }"
-              >
-                {i + 1}
-              </button>
-            ))
-          }
-        </div>
-      </div>
-    </section>
-  </main>
-</Layout>
-
-<!-- Importamos Alpine.js para manejar el estado en cliente -->
-<script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
+<script src="https://clic.baradero.gob.ar/wp-includes/js/jquery/jquery.min.js"></script>
+<script src="https://clic.baradero.gob.ar/wp-content/plugins/elementor/assets/js/frontend.min.js"></script>
+</body>
+</html>

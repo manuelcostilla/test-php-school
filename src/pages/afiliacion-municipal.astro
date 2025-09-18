@@ -4,8 +4,8 @@ import Header from "../components/header.astro";
 import Footer from "../components/footer.astro"; // Asegúrate de crear este componente
 import Layout from "../layouts/Layout.astro";
 
-const { id: pageId, title } = await getPageInfo("elementor-192");
-const pageUrl = 'https://clic.baradero.gob.ar/elementor-192/';
+const { id: pageId, title } = await getPageInfo("afiliacion-municipal");
+const pageUrl = 'https://clic.baradero.gob.ar/afiliacion-municipal/';
 const response = await fetch(pageUrl);
 const pageHtml = await response.text();
 
