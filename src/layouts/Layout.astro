@@ -12,6 +12,8 @@ import Footer from "../components/footer.astro";
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="generator" content={Astro.generator} />
     <title>Centro Universitario Baradero</title>
+
+    <slot name="head" />
   </head>
   <body>
     <Header />
@@ -21,10 +23,14 @@ import Footer from "../components/footer.astro";
 </html>
 
 <style>
-  html,
-  body {
+  html {
+    /* Mantenemos solo el estilo para <html> aquí */
     margin: 0;
     width: 100%;
     height: 100%;
+    overflow-x: hidden;
   }
+  
+  /* Se eliminó el estilo del <body> de aquí. Ahora el estilo del <body>
+  del formulario no entrará en conflicto con los demás archivos. */
 </style>
