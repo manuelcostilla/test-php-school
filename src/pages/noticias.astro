@@ -12,11 +12,26 @@ const pageHtml = await response.text();
 
 const noticias = await getPostsByCategory(9, { perPage: 20 });
 
+const eventosUrl = 'https://clic.baradero.gob.ar/eventos/';
+const clicUrl = 'https://clic.baradero.gob.ar/elementor-117/';
+const sobreNosotrosUrl = 'https://clic.baradero.gob.ar/sobre-nosotros/';
+
+const eventosHtml = (await (await fetch(eventosUrl)).text())
+  .replace(/<header[\s\S]*?<\/header>/g, '')
+  .replace(/<footer[\s\S]*?<\/footer>/g, '');
+
+const clicHtml = (await (await fetch(clicUrl)).text())
+  .replace(/<header[\s\S]*?<\/header>/g, '')
+  .replace(/<footer[\s\S]*?<\/footer>/g, '');
+
+const sobreHtml = (await (await fetch(sobreNosotrosUrl)).text())
+  .replace(/<header[\s\S]*?<\/header>/g, '')
+  .replace(/<footer[\s\S]*?<\/footer>/g, '');
+
 let content = pageHtml.replace(/<header[\s\S]*?<\/header>/g, '');
 content = content.replace(/<footer[\s\S]*?<\/footer>/g, '');
 
 ---
-
 
 <html lang="es">
 <head>
@@ -40,18 +55,60 @@ content = content.replace(/<footer[\s\S]*?<\/footer>/g, '');
 
     <div class="wp-content" set:html={content} />
 
-    <section class="container mx-auto px-4 py-8">
-      <h2 class="text-3xl font-semibold text-gray-800 mb-8">Noticias</h2>
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-        {noticias.length > 0 ? (
-          noticias.map((post) => <PostCard post={post} />)
-        ) : (
-          <p class="text-gray-600 text-center col-span-full">
-            No hay Noticias cargadas todavía.
-          </p>
-        )}
+    <section id="noticias-section" class="container mx-auto px-4 py-8 relative">
+  <div class="grid grid-cols-1 lg:grid-cols-[300px_1fr] gap-8 items-start relative">
+
+    <!-- Columna ASIDE -->
+    <aside id="sidebar" class="transition-all duration-300 relative">
+      <div class="sidebar-inner w-full">
+        <div class="bg-white border border-gray-200 rounded-xl shadow-md overflow-hidden">
+          <div class="bg-[#2B72AC] text-white text-lg font-semibold px-5 py-3 rounded-t-xl">
+            Secciones
+          </div>
+          <div class="p-4 space-y-4">
+
+            <a href="/eventos" class="group block bg-white border border-gray-200 rounded-lg p-4 shadow-sm hover:shadow-lg transition-all duration-200 transform hover:-translate-y-1 hover:border-[#2B72AC]">
+              <div class="flex items-center gap-3">
+                <span class="text-2xl transition-transform group-hover:scale-110">📅</span>
+                <span class="text-gray-800 font-medium text-sm group-hover:text-[#2B72AC]">Eventos</span>
+              </div>
+            </a>
+
+            <a href="/clic" class="group block bg-white border border-gray-200 rounded-lg p-4 shadow-sm hover:shadow-lg transition-all duration-200 transform hover:-translate-y-1 hover:border-[#2B72AC]">
+              <div class="flex items-center gap-3">
+                <span class="text-2xl transition-transform group-hover:scale-110">🎓</span>
+                <span class="text-gray-800 font-medium text-sm group-hover:text-[#2B72AC]">Clic</span>
+              </div>
+            </a>
+
+            <a href="/sob-nosotros" class="group block bg-white border border-gray-200 rounded-lg p-4 shadow-sm hover:shadow-lg transition-all duration-200 transform hover:-translate-y-1 hover:border-[#2B72AC]">
+              <div class="flex items-center gap-3">
+                <span class="text-2xl transition-transform group-hover:scale-110">🧑‍💼</span>
+                <span class="text-gray-800 font-medium text-sm group-hover:text-[#2B72AC]">Sobre Nosotros</span>
+              </div>
+            </a>
+
+          </div>
+        </div>
       </div>
-    </section>
+    </aside>
+
+    <!-- Columna NOTICIAS -->
+    <div id="noticias" class="grid grid-cols-1 md:grid-cols-2 gap-8">
+      {noticias.length > 0 ? (
+        noticias.map((post) => <PostCard post={post} />)
+      ) : (
+        <p class="text-gray-600 text-center col-span-full">
+          No hay Noticias cargadas todavía.
+        </p>
+      )}
+    </div>
+
+  </div>
+</section>
+
+
+
 
     <Footer slot="footer" />
   </Layout>
@@ -59,8 +116,8 @@ content = content.replace(/<footer[\s\S]*?<\/footer>/g, '');
   <script src="https://clic.baradero.gob.ar/wp-includes/js/jquery/jquery.min.js"></script>
   <script src="https://clic.baradero.gob.ar/wp-content/plugins/elementor/assets/js/frontend.min.js"></script>
 
-    <style is:global>
-       h2 {
+  <style is:global>
+    h2 {
       color: #2B72AC !important;
     }
     .elementor-button {
@@ -90,9 +147,53 @@ content = content.replace(/<footer[\s\S]*?<\/footer>/g, '');
     .elementor-container {
       padding: 0 !important;
     }
-    </style>
 
-<script src="https://clic.baradero.gob.ar/wp-includes/js/jquery/jquery.min.js"></script>
-<script src="https://clic.baradero.gob.ar/wp-content/plugins/elementor/assets/js/frontend.min.js"></script>
+    .sidebar-inner {
+      position: static;
+      transition: top 0.3s ease;
+    }
+
+  </style>
+
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const sidebar = document.getElementById('sidebar');
+    const sidebarInner = sidebar.querySelector('.sidebar-inner');
+    const noticiasSection = document.getElementById('noticias-section');
+
+    const startOffset = noticiasSection.offsetTop; // punto en el que empieza a fijarse
+    const stopOffset = noticiasSection.offsetTop + noticiasSection.offsetHeight - sidebarInner.offsetHeight - 20;
+
+    const updateSidebar = () => {
+      const scrollY = window.scrollY || window.pageYOffset;
+
+      if (scrollY > startOffset && scrollY < stopOffset) {
+        sidebarInner.style.position = 'fixed';
+        sidebarInner.style.top = '20px';
+        sidebarInner.style.width = sidebar.offsetWidth + 'px';
+      } else if (scrollY >= stopOffset) {
+        sidebarInner.style.position = 'absolute';
+        sidebarInner.style.top = (stopOffset - startOffset) + 'px';
+        sidebarInner.style.width = '100%';
+      } else {
+        sidebarInner.style.position = 'static';
+        sidebarInner.style.top = 'auto';
+        sidebarInner.style.width = '100%';
+      }
+    };
+
+    updateSidebar();
+    window.addEventListener('scroll', updateSidebar);
+    window.addEventListener('resize', () => {
+      if (sidebarInner.style.position === 'fixed') {
+        sidebarInner.style.width = sidebar.offsetWidth + 'px';
+      }
+    });
+  });
+</script>
+
+
+
 </body>
 </html>
