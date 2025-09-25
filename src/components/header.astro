@@ -1,21 +1,24 @@
 ---
-// Navbar.astro (Tailwind)
+
 ---
-<script>
-  function toggleMenu() {
-    const nav = document.getElementById("navbar-links");
-    nav.classList.toggle("hidden");
-    nav.classList.toggle("flex");
-  }
-</script>
 
 <header>
-  <div class="h-24 bg-[#4b4b4d] flex items-center justify-between px-6 relative">
+  <div
+    class="h-24 bg-[#4b4b4d] flex items-center justify-between px-6 relative"
+  >
     <!-- Logo -->
-    <img class="h-[90px] w-[140px] flex-shrink-0 z-10" src="/logo.png" alt="Logo de Clic Baradero" />
+    <img
+      class="h-[90px] w-[140px] flex-shrink-0 z-10"
+      src="/logo.png"
+      alt="Logo de Clic Baradero"
+    />
 
     <!-- Botón hamburguesa -->
-    <div class="lg:hidden flex flex-col cursor-pointer z-20" on:click={toggleMenu}>
+    <div
+      class="lg:hidden flex flex-col cursor-pointer z-20"
+      id="hamburger-button"
+      onclick="document.getElementById('navbar-links').classList.toggle('hidden')"
+    >
       <span class="h-[3px] w-6 bg-white mb-1"></span>
       <span class="h-[3px] w-6 bg-white mb-1"></span>
       <span class="h-[3px] w-6 bg-white"></span>
@@ -24,29 +27,104 @@
     <!-- Menu centrado (desktop) -->
     <div class="flex-1 hidden lg:flex justify-center">
       <nav id="navbar-links" class="flex items-center gap-4 whitespace-nowrap">
-        <a href="/" class="text-white text-sm font-semibold px-[20px] py-[6px] rounded-md hover:bg-[#606062] transition-colors duration-200">INICIO</a>
-        <a href="/universidades" class="text-white text-sm font-semibold px-[20px] py-[6px] rounded-md hover:bg-[#606062] transition-colors duration-200">UNIVERSIDADES</a>
-        <a href="/centrouniversitario" class="text-white text-sm font-semibold px-[20px] py-[6px] rounded-md hover:bg-[#606062] transition-colors duration-200">CUB</a>
-        <a href="/fines" class="text-white text-sm font-semibold px-[20px] py-[6px] rounded-md hover:bg-[#606062] transition-colors duration-200">FINES</a>
-        <a href="/contac" class="text-white text-sm font-semibold px-[20px] py-[6px] rounded-md hover:bg-[#606062] transition-colors duration-200">CONTACTANOS</a>
-        <a href="/noticias" class="text-white text-sm font-semibold px-[25px] py-[6px] rounded-md hover:bg-[#606062] transition-colors duration-200">NOTICIAS</a>
-        <a href="/form" class="text-white text-sm font-semibold px-[25px] py-[6px] rounded-md hover:bg-[#606062] transition-colors duration-200">INSCRIPCIONES</a>
-        <a href="/producciones-alumnos" class="text-white text-sm font-semibold px-[20px] py-[6px] rounded-md hover:bg-[#606062] transition-colors duration-200">PRODUCCIONES ALUMNOS</a>
-        <a href="/afiliacion-municipal" class="text-white text-sm font-semibold px-[25px] py-[6px] rounded-md hover:bg-[#606062] transition-colors duration-200">AFILIACION MUNICIPAL</a>
+        <a
+          href="/"
+          class="text-white text-sm font-semibold px-[20px] py-[6px] rounded-md hover:bg-[#606062] transition-colors duration-200"
+          >INICIO</a
+        >
+        <a
+          href="/universidades"
+          class="text-white text-sm font-semibold px-[20px] py-[6px] rounded-md hover:bg-[#606062] transition-colors duration-200"
+          >UNIVERSIDADES</a
+        >
+        <a
+          href="/centrouniversitario"
+          class="text-white text-sm font-semibold px-[20px] py-[6px] rounded-md hover:bg-[#606062] transition-colors duration-200"
+          >CUB</a
+        >
+        <a
+          href="/fines"
+          class="text-white text-sm font-semibold px-[20px] py-[6px] rounded-md hover:bg-[#606062] transition-colors duration-200"
+          >FINES</a
+        >
+        <a
+          href="/contac"
+          class="text-white text-sm font-semibold px-[20px] py-[6px] rounded-md hover:bg-[#606062] transition-colors duration-200"
+          >CONTACTANOS</a
+        >
+        <a
+          href="/noticias"
+          class="text-white text-sm font-semibold px-[25px] py-[6px] rounded-md hover:bg-[#606062] transition-colors duration-200"
+          >NOTICIAS</a
+        >
+        <a
+          href="/form"
+          class="text-white text-sm font-semibold px-[25px] py-[6px] rounded-md hover:bg-[#606062] transition-colors duration-200"
+          >INSCRIPCIONES</a
+        >
+        <a
+          href="/producciones-alumnos"
+          class="text-white text-sm font-semibold px-[20px] py-[6px] rounded-md hover:bg-[#606062] transition-colors duration-200"
+          >PRODUCCIONES ALUMNOS</a
+        >
+        <a
+          href="/afiliacion-municipal"
+          class="text-white text-sm font-semibold px-[25px] py-[6px] rounded-md hover:bg-[#606062] transition-colors duration-200"
+          >AFILIACION MUNICIPAL</a
+        >
       </nav>
     </div>
 
     <!-- Menú móvil (solo visible en mobile) -->
-    <nav id="navbar-links" class="absolute top-24 left-0 w-full bg-[#4b4b4d] flex-col items-center gap-0 pb-4 hidden lg:hidden z-50">
-      <a href="/" class="text-white text-sm font-semibold py-4 w-full text-center border-t border-[#606062] hover:bg-[#606062]">INICIO</a>
-      <a href="/universidades" class="text-white text-sm font-semibold py-4 w-full text-center border-t border-[#606062] hover:bg-[#606062]">UNIVERSIDADES</a>
-      <a href="/centrouniversitario" class="text-white text-sm font-semibold py-4 w-full text-center border-t border-[#606062] hover:bg-[#606062]">CUB</a>
-      <a href="/fines" class="text-white text-sm font-semibold py-4 w-full text-center border-t border-[#606062] hover:bg-[#606062]">FINES</a>
-      <a href="/contac" class="text-white text-sm font-semibold py-4 w-full text-center border-t border-[#606062] hover:bg-[#606062]">CONTACTANOS</a>
-      <a href="/noticias" class="text-white text-sm font-semibold py-4 w-full text-center border-t border-[#606062] hover:bg-[#606062]">NOTICIAS</a>
-      <a href="/form" class="text-white text-sm font-semibold py-4 w-full text-center border-t border-[#606062] hover:bg-[#606062]">INSCRIPCIONES</a>
-      <a href="/producciones-alumnos" class="text-white text-sm font-semibold py-4 w-full text-center border-t border-[#606062] hover:bg-[#606062]">PRODUCCIONES ALUMNOS</a>
-      <a href="/afiliacion-municipal" class="text-white text-sm font-semibold py-4 w-full text-center border-t border-[#606062] hover:bg-[#606062]">AFILIACION MUNICIPAL</a>
+    <nav
+      id="navbar-links"
+      class="absolute top-24 left-0 w-full bg-[#4b4b4d] flex-col items-center gap-0 pb-4 hidden lg:hidden z-50"
+    >
+      <a
+        href="/"
+        class="text-white text-sm font-semibold py-4 w-full text-center border-t border-[#606062] hover:bg-[#606062]"
+        >INICIO</a
+      >
+      <a
+        href="/universidades"
+        class="text-white text-sm font-semibold py-4 w-full text-center border-t border-[#606062] hover:bg-[#606062]"
+        >UNIVERSIDADES</a
+      >
+      <a
+        href="/centrouniversitario"
+        class="text-white text-sm font-semibold py-4 w-full text-center border-t border-[#606062] hover:bg-[#606062]"
+        >CUB</a
+      >
+      <a
+        href="/fines"
+        class="text-white text-sm font-semibold py-4 w-full text-center border-t border-[#606062] hover:bg-[#606062]"
+        >FINES</a
+      >
+      <a
+        href="/contac"
+        class="text-white text-sm font-semibold py-4 w-full text-center border-t border-[#606062] hover:bg-[#606062]"
+        >CONTACTANOS</a
+      >
+      <a
+        href="/noticias"
+        class="text-white text-sm font-semibold py-4 w-full text-center border-t border-[#606062] hover:bg-[#606062]"
+        >NOTICIAS</a
+      >
+      <a
+        href="/form"
+        class="text-white text-sm font-semibold py-4 w-full text-center border-t border-[#606062] hover:bg-[#606062]"
+        >INSCRIPCIONES</a
+      >
+      <a
+        href="/producciones-alumnos"
+        class="text-white text-sm font-semibold py-4 w-full text-center border-t border-[#606062] hover:bg-[#606062]"
+        >PRODUCCIONES ALUMNOS</a
+      >
+      <a
+        href="/afiliacion-municipal"
+        class="text-white text-sm font-semibold py-4 w-full text-center border-t border-[#606062] hover:bg-[#606062]"
+        >AFILIACION MUNICIPAL</a
+      >
     </nav>
   </div>
 </header>

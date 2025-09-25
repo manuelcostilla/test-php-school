@@ -9,8 +9,6 @@ const pageUrl = 'https://clic.baradero.gob.ar/inicio/';
 const response = await fetch(pageUrl);
 const pageHtml = await response.text();
 
-// Usamos expresiones regulares para eliminar el <header> y el <footer>.
-// Mantenemos los scripts ya que son necesarios para los estilos.
 let content = pageHtml.replace(/<header[\s\S]*?<\/header>/g, '');
 content = content.replace(/<footer[\s\S]*?<\/footer>/g, '');
 
