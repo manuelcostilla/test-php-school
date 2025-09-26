@@ -1,94 +1,96 @@
 ---
 import { getPageInfo, getPostsByCategory } from "../lib/wp";
 import Header from "../components/header.astro";
-import Footer from "../components/footer.astro"; 
+import Footer from "../components/footer.astro";
 import Layout from "../layouts/Layout.astro";
 import PostCard from "../components/PostCard.astro";
 
-const { id: pageId, title } = await getPageInfo("eventos");
-const pageUrl = 'https://clic.baradero.gob.ar/eventos/';
+const pageInfo = await getPageInfo("eventos");
+const pageId = pageInfo?.id ?? "";
+const title = pageInfo?.title ?? "eventos";
+const pageUrl = "https://clic.baradero.gob.ar/eventos/";
 const response = await fetch(pageUrl);
 const pageHtml = await response.text();
 
 const noticias = await getPostsByCategory(12, { perPage: 20 });
 
-let content = pageHtml.replace(/<header[\s\S]*?<\/header>/g, '');
-content = content.replace(/<footer[\s\S]*?<\/footer>/g, '');
-
+let content = pageHtml.replace(/<header[\s\S]*?<\/header>/g, "");
+content = content.replace(/<footer[\s\S]*?<\/footer>/g, "");
 ---
 
 <html lang="es">
-<head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>{title}</title>
-    <link rel="stylesheet" href="https://clic.baradero.gob.ar/wp-content/plugins/elementor/assets/css/frontend.min.css"/>
-    <link rel="stylesheet" href="https://clic.baradero.gob.ar/wp-content/themes/astra/assets/css/minified/main.min.css"/>
-    <link rel="stylesheet" href="https://clic.baradero.gob.ar/wp-content/uploads/elementor/css/global.css"/>
-    <link rel="stylesheet" href={`https://clic.baradero.gob.ar/wp-content/uploads/elementor/css/post-${pageId}.css`}/>
-    <link rel="stylesheet" href="https://clic.baradero.gob.ar/wp-content/uploads/elementor/css/post-9.css"/>
-    <link rel='stylesheet' id='widget-divider-css' href='https://clic.baradero.gob.ar/wp-content/plugins/elementor/assets/css/widget-divider.min.css?ver=3.31.5' media='all' />
-    <link rel="stylesheet" href="https://clic.baradero.gob.ar/wp-content/plugins/elementor/assets/lib/eicons/css/elementor-icons.min.css"/>
-    <link rel="stylesheet" href="https://clic.baradero.gob.ar/wp-content/uploads/elementor/google-fonts/css/roboto.css"/>
-    <link rel="stylesheet" href="https://clic.baradero.gob.ar/wp-content/uploads/elementor/google-fonts/css/robotoslab.css"/>
-</head>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{title}</title>
+  </head>
 
-<body>
-    <Layout title={title}>
-    <Header slot="header" />
+  <body>
+    <Layout title={title} pageId={pageId}>
+      <Header slot="header" />
 
-    <div class="wp-content" set:html={content} />
+      <div class="wp-content" set:html={content} />
 
-    <section class="container mx-auto px-4 py-8">
-      <h2 class="text-3xl font-semibold text-gray-800 mb-8">Eventos</h2>
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-        {noticias.length > 0 ? (
-          noticias.map((post) => <PostCard post={post} />)
-        ) : (
-          <p class="text-gray-600 text-center col-span-full">
-            No hay eventos cargadas todavía.
-          </p>
-        )}
-      </div>
-    </section>
+      <section class="container mx-auto px-4 py-8">
+        <h2 class="text-3xl font-semibold text-gray-800 mb-8">Eventos</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {
+            noticias.length > 0 ? (
+              noticias.map((post: any) => <PostCard post={post} />)
+            ) : (
+              <p class="text-gray-600 text-center col-span-full">
+                No hay eventos cargadas todavía.
+              </p>
+            )
+          }
+        </div>
+      </section>
 
-    <Footer slot="footer" />
-  </Layout>
+      <Footer slot="footer" />
+    </Layout>
 
-  <script src="https://clic.baradero.gob.ar/wp-includes/js/jquery/jquery.min.js"></script>
-  <script src="https://clic.baradero.gob.ar/wp-content/plugins/elementor/assets/js/frontend.min.js"></script>
+    <script
+      src="https://clic.baradero.gob.ar/wp-includes/js/jquery/jquery.min.js"
+    ></script>
+    <script
+      src="https://clic.baradero.gob.ar/wp-content/plugins/elementor/assets/js/frontend.min.js"
+    ></script>
 
     <style is:global>
-    .elementor-button {
-      background-color: #2B72AC;
-    }
-    .elementor-button:hover {
-      background-color: #185688;
-    }
+      .elementor-button {
+        background-color: #2b72ac;
+      }
+      .elementor-button:hover {
+        background-color: #185688;
+      }
 
-    .wp-content {
-      margin: 0 !important;
-      padding: 0 !important;
-    }
+      .wp-content {
+        margin: 0 !important;
+        padding: 0 !important;
+      }
 
-    .wp-content > * {
-      margin: 0 !important;
-      padding: 0 !important;
-    }
+      .wp-content > * {
+        margin: 0 !important;
+        padding: 0 !important;
+      }
 
-    .elementor-section {
-      margin: 0 !important;
-      padding: 0 !important;
-      min-height: 0 !important;
-      height: auto !important;
-    }
+      .elementor-section {
+        margin: 0 !important;
+        padding: 0 !important;
+        min-height: 0 !important;
+        height: auto !important;
+      }
 
-    .elementor-container {
-      padding: 0 !important;
-    }
+      .elementor-container {
+        padding: 0 !important;
+      }
     </style>
 
-<script src="https://clic.baradero.gob.ar/wp-includes/js/jquery/jquery.min.js"></script>
-<script src="https://clic.baradero.gob.ar/wp-content/plugins/elementor/assets/js/frontend.min.js"></script>
-</body>
+    <script
+      src="https://clic.baradero.gob.ar/wp-includes/js/jquery/jquery.min.js"
+    ></script>
+    <script
+      src="https://clic.baradero.gob.ar/wp-content/plugins/elementor/assets/js/frontend.min.js"
+    ></script>
+  </body>
 </html>

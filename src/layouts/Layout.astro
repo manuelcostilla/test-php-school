@@ -1,37 +1,98 @@
 ---
+// src/layouts/Layout.astro (Deduplicated and Cleaned)
+
 import "../styles/global.css";
 import Header from "../components/header.astro";
 import Footer from "../components/footer.astro";
+
+export interface Props {
+  title: string;
+  pageId: number | string;
+}
+
+const { title, pageId } = Astro.props;
 ---
 
 <!doctype html>
-<html lang="es-AR">
+<html lang="es">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-  
-    <meta name="generator" content={Astro.generator} />
-    <title>Centro Universitario Baradero</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{title}</title>
 
-    <slot name="head" />
+    <link
+      rel="preconnect"
+      rel="stylesheet"
+      href="https://clic.baradero.gob.ar/wp-content/plugins/elementor/assets/css/frontend.min.css"
+    />
+    <link
+      rel="preconnect"
+      rel="stylesheet"
+      href="https://clic.baradero.gob.ar/wp-content/themes/astra/assets/css/minified/main.min.css"
+    />
+
+    <link
+      rel="preconnect"
+      rel="stylesheet"
+      href="https://clic.baradero.gob.ar/wp-content/uploads/elementor/css/global.css"
+    />
+    <link
+      rel="preconnect"
+      rel="stylesheet"
+      href="https://clic.baradero.gob.ar/wp-content/uploads/elementor/css/post-9.css"
+    />
+
+    <link
+      rel="preconnect"
+      rel="stylesheet"
+      href={`https://clic.baradero.gob.ar/wp-content/uploads/elementor/css/post-${pageId}.css`}
+    />
+
+    <link
+      rel="preconnect"
+      rel="stylesheet"
+      href="https://clic.baradero.gob.ar/wp-content/plugins/elementor/assets/lib/eicons/css/elementor-icons.min.css"
+    />
+    <link
+      rel="preconnect"
+      rel="stylesheet"
+      id="widget-divider-css"
+      href="https://clic.baradero.gob.ar/wp-content/plugins/elementor/assets/css/widget-divider.min.css?ver=3.31.5"
+      media="all"
+    />
+
+    <link
+      rel="preconnect"
+      rel="stylesheet"
+      href="https://clic.baradero.gob.ar/wp-content/uploads/elementor/google-fonts/css/roboto.css"
+    />
+    <link
+      rel="preconnect"
+      rel="stylesheet"
+      href="https://clic.baradero.gob.ar/wp-content/uploads/elementor/google-fonts/css/robotoslab.css"
+    />
   </head>
+
   <body>
     <Header />
     <slot />
     <Footer />
+
+    <script
+      src="https://clic.baradero.gob.ar/wp-includes/js/jquery/jquery.min.js"
+    ></script>
+    <script
+      src="https://clic.baradero.gob.ar/wp-content/plugins/elementor/assets/js/frontend.min.js"
+    ></script>
   </body>
 </html>
 
 <style>
   html {
-    /* Mantenemos solo el estilo para <html> aquí */
+    /* Keep only necessary global HTML styles */
     margin: 0;
     width: 100%;
     height: 100%;
     overflow-x: hidden;
   }
-  
-  /* Se eliminó el estilo del <body> de aquí. Ahora el estilo del <body>
-  del formulario no entrará en conflicto con los demás archivos. */
 </style>

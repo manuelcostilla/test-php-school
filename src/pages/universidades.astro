@@ -5,13 +5,15 @@ import Footer from "../components/footer.astro";
 import Layout from "../layouts/Layout.astro";
 import PostCard from "../components/PostCard.astro";
 
-const { id: pageId, title } = await getPageInfo("universidades");
-const pageUrl = 'https://clic.baradero.gob.ar/universidades/';
+const pageInfo = await getPageInfo("universidades");
+const pageId = pageInfo?.id ?? "";
+const title = pageInfo?.title ?? "universidades";
+const pageUrl = "https://clic.baradero.gob.ar/universidades/";
 const response = await fetch(pageUrl);
 const pageHtml = await response.text();
 
-let content = pageHtml.replace(/<header[\s\S]*?<\/header>/g, '');
-content = content.replace(/<footer[\s\S]*?<\/footer>/g, '');
+let content = pageHtml.replace(/<header[\s\S]*?<\/header>/g, "");
+content = content.replace(/<footer[\s\S]*?<\/footer>/g, "");
 
 // Obtener las universidades desde la categoría 13
 const universidades = await getPostsByCategory(13, { perPage: 20 });
@@ -22,20 +24,10 @@ const universidades = await getPostsByCategory(13, { perPage: 20 });
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>{title}</title>
-
-    <link rel="stylesheet" href="https://clic.baradero.gob.ar/wp-content/plugins/elementor/assets/css/frontend.min.css"/>
-    <link rel="stylesheet" href="https://clic.baradero.gob.ar/wp-content/themes/astra/assets/css/minified/main.min.css"/>
-    <link rel="stylesheet" href="https://clic.baradero.gob.ar/wp-content/uploads/elementor/css/global.css"/>
-    <link rel="stylesheet" href={`https://clic.baradero.gob.ar/wp-content/uploads/elementor/css/post-${pageId}.css`}/>
-    <link rel="stylesheet" href="https://clic.baradero.gob.ar/wp-content/uploads/elementor/css/post-9.css"/>
-    <link rel='stylesheet' id='widget-divider-css' href='https://clic.baradero.gob.ar/wp-content/plugins/elementor/assets/css/widget-divider.min.css?ver=3.31.5' media='all' />
-    <link rel="stylesheet" href="https://clic.baradero.gob.ar/wp-content/plugins/elementor/assets/lib/eicons/css/elementor-icons.min.css"/>
-    <link rel="stylesheet" href="https://clic.baradero.gob.ar/wp-content/uploads/elementor/google-fonts/css/roboto.css"/>
-    <link rel="stylesheet" href="https://clic.baradero.gob.ar/wp-content/uploads/elementor/google-fonts/css/robotoslab.css"/>
   </head>
 
   <body>
-    <Layout title={title}>
+    <Layout title={title} pageId={pageId}>
       <Header slot="header" />
 
       <!-- Contenido cargado desde WordPress -->
@@ -45,28 +37,34 @@ const universidades = await getPostsByCategory(13, { perPage: 20 });
       <section class="container mx-auto px-4 py-8">
         <h2 class="text-3xl font-semibold text-gray-800 mb-8">Universidades</h2>
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {universidades.length > 0 ? (
-            universidades.map((post) => <PostCard post={post} />)
-          ) : (
-            <p class="text-gray-600 text-center col-span-full">
-              No hay universidades cargadas todavía.
-            </p>
-          )}
+          {
+            universidades.length > 0 ? (
+              universidades.map((post: any) => <PostCard post={post} />)
+            ) : (
+              <p class="text-gray-600 text-center col-span-full">
+                No hay universidades cargadas todavía.
+              </p>
+            )
+          }
         </div>
       </section>
 
       <Footer slot="footer" />
     </Layout>
 
-    <script src="https://clic.baradero.gob.ar/wp-includes/js/jquery/jquery.min.js"></script>
-    <script src="https://clic.baradero.gob.ar/wp-content/plugins/elementor/assets/js/frontend.min.js"></script>
+    <script
+      src="https://clic.baradero.gob.ar/wp-includes/js/jquery/jquery.min.js"
+    ></script>
+    <script
+      src="https://clic.baradero.gob.ar/wp-content/plugins/elementor/assets/js/frontend.min.js"
+    ></script>
 
     <style is:global>
       h2 {
-        color: #2B72AC !important;
+        color: #2b72ac !important;
       }
       .elementor-button {
-        background-color: #2B72AC;
+        background-color: #2b72ac;
       }
       .elementor-button:hover {
         background-color: #185688;

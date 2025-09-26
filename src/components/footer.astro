@@ -1,48 +1,143 @@
-   
-     ---
-    import { Icon } from 'astro-icon/components';
-    ---
-   
-   <footer class="bg-white text-black text-sm px-4 sm:px-6 lg:px-8 py-10 border-t border-[#dcdcdc]">
-    <div class="flex flex-col md:flex-row justify-between lg:justify-around max-w-[1200px] flex-wrap mx-auto gap-10 md:gap-6">
-        
-        <!-- Logo y descripción -->
-        <div class="flex-1 min-w-[250px] text-center md:text-left">
-        <h2 class="text-lg font-semibold mb-5">Centro Universitario Baradero</h2>
-        <p class="leading-relaxed mb-5">
-            Trabajamos para que tengas acceso a la mejor información en todo momento y en las mejores instalaciones de la ciudad.
+---
+import { Icon } from "astro-icon/components";
+// Define the link data for easy maintenance and cleaner HTML
+const footerLinks = [
+  { text: "Inicio", href: "/" },
+  { text: "Fines", href: "/fines" },
+  { text: "CUB", href: "/centrouniversitario" },
+  { text: "Universidades", href: "/universidades" },
+  { text: "Noticias", href: "/noticias" },
+];
+
+const socialMedia = [
+  {
+    name: "Facebook",
+    icon: "ri:facebook-fill",
+    href: "#",
+    color: "hover:text-blue-400",
+  },
+  {
+    name: "Instagram",
+    icon: "ri:instagram-line",
+    href: "#",
+    color: "hover:text-pink-400",
+  },
+  {
+    name: "YouTube",
+    icon: "ri:youtube-fill",
+    href: "#",
+    color: "hover:text-red-400",
+  },
+];
+---
+
+<footer class="bg-white text-gray-300 text-sm px-4 sm:px-6 lg:px-8 py-16">
+  <div class="max-w-7xl mx-auto">
+    <div
+      class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 md:gap-16 pb-12 border-b border-gray-700"
+    >
+      <div
+        class="col-span-1 md:col-span-2 lg:col-span-1 text-center md:text-left"
+      >
+        <h2 class="text-2xl font-bold text-gray-50 mb-4 tracking-wider">
+          Centro Universitario
+        </h2>
+        <p class="leading-relaxed mb-6 text-black">
+          Trabajamos para que tengas acceso a la mejor información en todo
+          momento y en las mejores instalaciones de la ciudad.
         </p>
-        <div class="flex justify-center md:justify-start gap-4">
-            <a href="#" class="text-black text-xl border border-black p-2 rounded hover:bg-black hover:text-white transition"><i class="fab fa-facebook-f"></i></a>
-            <a href="#" class="text-black text-xl border border-black p-2 rounded hover:bg-black hover:text-white transition"><i class="fab fa-instagram"></i></a>
-            <a href="#" class="text-black text-xl border border-black p-2 rounded hover:bg-black hover:text-white transition"><i class="fab fa-youtube"></i></a>
-        </div>
-        </div>
 
-        <!-- Enlaces rápidos -->
-        <div class="flex-1 min-w-[200px] text-center md:text-left">
-        <h2 class="text-lg font-semibold mb-5">Enlaces rápidos</h2>
-        <ul class="space-y-2">
-            <li><a href="src/pages/index" class="uppercase text-sm hover:underline">Inicio</a></li>
-            <li><a href="#" class="uppercase text-sm hover:underline">Fines</a></li>
-            <li><a href="#" class="uppercase text-sm hover:underline">Clic</a></li>
-            <li><a href="#" class="uppercase text-sm hover:underline">Universidades</a></li>
-            <li><a href="#" class="uppercase text-sm hover:underline">Noticias</a></li>
+        <div class="flex justify-center md:justify-start gap-4 mt-6">
+          {
+            socialMedia.map((item) => (
+              <a
+                href={item.href}
+                aria-label={item.name}
+                class={`p-2 transition-colors duration-300 rounded-full text-gray-400 border border-gray-700 hover:border-gray-50 ${item.color} hover:bg-gray-800`}
+              >
+                <Icon name={item.icon} class="w-5 h-5" />
+              </a>
+            ))
+          }
+        </div>
+      </div>
+
+      <div class="text-center md:text-left">
+        <h3
+          class="text-lg font-semibold text-indigo-400 mb-6 border-b border-indigo-700 pb-2 inline-block"
+        >
+          Enlaces rápidos
+        </h3>
+        <ul class="space-y-4">
+          {
+            footerLinks.map((link) => (
+              <li>
+                <a
+                  href={link.href}
+                  class="block text-gray-300 hover:text-gray-50 transition-colors duration-200 hover:tracking-wide"
+                >
+                  {link.text}
+                </a>
+              </li>
+            ))
+          }
         </ul>
-        </div>
+      </div>
 
-        <!-- Información de contacto -->
-        <div class="flex-1 min-w-[250px] text-center md:text-left">
-        <h2 class="text-lg font-semibold mb-5">Información de contacto</h2>
-        <p class="mb-2">Teléfono: +3329-519696</p>
-        <p class="mb-2">Email: centrouniversitario@gmail.com</p>
-        <p class="mb-2">Dirección: esquina Thames y Gallo</p>
-        <p>Ciudad: Baradero</p>
+      <div class="text-center md:text-left lg:col-span-2">
+        <h3
+          class="text-lg font-semibold text-indigo-400 mb-6 border-b border-indigo-700 pb-2 inline-block"
+        >
+          Información de contacto
+        </h3>
+        <div class="space-y-4 text-base">
+          <p
+            class="flex items-center justify-center md:justify-start gap-3 text-gray-300"
+          >
+            <Icon
+              name="ri:phone-line"
+              class="w-5 h-5 text-indigo-400 flex-shrink-0"
+            />
+            <span class="text-black">
+              Teléfono:
+              <a href="tel:+3329519696" class="text-black transition-colors"
+                >+3329-519696</a
+              >
+            </span>
+          </p>
+          <p
+            class="flex items-center justify-center md:justify-start gap-3 text-gray-300"
+          >
+            <Icon
+              name="ri:mail-line"
+              class="w-5 h-5 text-indigo-400 flex-shrink-0"
+            />
+            <span class="text-black">
+              Email:
+              <a
+                href="mailto:centrouniversitario@gmail.com"
+                class="text-black transition-colors"
+                >centrouniversitario@gmail.com</a
+              >
+            </span>
+          </p>
+          <p
+            class="flex items-start justify-center md:justify-start gap-3 text-gray-300"
+          >
+            <Icon
+              name="ri:map-pin-line"
+              class="w-5 h-5 text-indigo-400 flex-shrink-0 mt-0.5"
+            />
+            <span class="text-black"
+              >Dirección: esquina Thames y Gallo, Baradero</span
+            >
+          </p>
         </div>
+      </div>
     </div>
 
-    <!-- Créditos -->
-    <div class="text-center text-[13px] text-[#777777] mt-10 pt-5 border-t border-[#dcdcdc]">
-        <p>&copy; 2025 Municipalidad. Todos los derechos reservados.</p>
+    <div class="text-center text-xs text-black mt-10 pt-4">
+      <p>&copy; 2025 Municipalidad. Todos los derechos reservados.</p>
     </div>
-    </footer>
+  </div>
+</footer>

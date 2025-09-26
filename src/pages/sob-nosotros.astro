@@ -4,42 +4,38 @@ import Header from "../components/header.astro";
 import Footer from "../components/footer.astro"; // Asegúrate de crear este componente
 import Layout from "../layouts/Layout.astro";
 
-const { id: pageId, title } = await getPageInfo("sobre-nosotros");
-const pageUrl = 'https://clic.baradero.gob.ar/sobre-nosotros/';
+const pageInfo = await getPageInfo("sobre-nosotros");
+const pageId = pageInfo?.id ?? "";
+const title = pageInfo?.title ?? "sobre-nosotros";
+const pageUrl = "https://clic.baradero.gob.ar/sobre-nosotros/";
 const response = await fetch(pageUrl);
 const pageHtml = await response.text();
 
 // Usamos expresiones regulares para eliminar el <header> y el <footer>.
 // Mantenemos los scripts ya que son necesarios para los estilos.
-let content = pageHtml.replace(/<header[\s\S]*?<\/header>/g, '');
-content = content.replace(/<footer[\s\S]*?<\/footer>/g, '');
-
+let content = pageHtml.replace(/<header[\s\S]*?<\/header>/g, "");
+content = content.replace(/<footer[\s\S]*?<\/footer>/g, "");
 ---
 
 <html lang="es">
-<head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>{title}</title>
-    <link rel="stylesheet" href="https://clic.baradero.gob.ar/wp-content/plugins/elementor/assets/css/frontend.min.css"/>
-    <link rel="stylesheet" href="https://clic.baradero.gob.ar/wp-content/themes/astra/assets/css/minified/main.min.css"/>
-    <link rel="stylesheet" href="https://clic.baradero.gob.ar/wp-content/uploads/elementor/css/global.css"/>
-    <link rel="stylesheet" href={`https://clic.baradero.gob.ar/wp-content/uploads/elementor/css/post-${pageId}.css`}/>
-    <link rel="stylesheet" href="https://clic.baradero.gob.ar/wp-content/uploads/elementor/css/post-9.css"/>
-    <link rel='stylesheet' id='widget-divider-css' href='https://clic.baradero.gob.ar/wp-content/plugins/elementor/assets/css/widget-divider.min.css?ver=3.31.5' media='all' />
-    <link rel="stylesheet" href="https://clic.baradero.gob.ar/wp-content/plugins/elementor/assets/lib/eicons/css/elementor-icons.min.css"/>
-    <link rel="stylesheet" href="https://clic.baradero.gob.ar/wp-content/uploads/elementor/google-fonts/css/roboto.css"/>
-    <link rel="stylesheet" href="https://clic.baradero.gob.ar/wp-content/uploads/elementor/google-fonts/css/robotoslab.css"/>
-</head>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{title}</title>
+  </head>
 
-<body>
-    <Layout title={title}>
-    <Header slot="header" />
-    <div set:html={content} />
-    <Footer slot="footer" />
+  <body>
+    <Layout title={title} pageId={pageId}>
+      <Header slot="header" />
+      <div set:html={content} />
+      <Footer slot="footer" />
     </Layout>
 
-<script src="https://clic.baradero.gob.ar/wp-includes/js/jquery/jquery.min.js"></script>
-<script src="https://clic.baradero.gob.ar/wp-content/plugins/elementor/assets/js/frontend.min.js"></script>
-</body>
+    <script
+      src="https://clic.baradero.gob.ar/wp-includes/js/jquery/jquery.min.js"
+    ></script>
+    <script
+      src="https://clic.baradero.gob.ar/wp-content/plugins/elementor/assets/js/frontend.min.js"
+    ></script>
+  </body>
 </html>

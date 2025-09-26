@@ -5,195 +5,229 @@ import Footer from "../components/footer.astro";
 import Layout from "../layouts/Layout.astro";
 import PostCard from "../components/PostCard.astro";
 
-const { id: pageId, title } = await getPageInfo("elementor-192");
-const pageUrl = 'https://clic.baradero.gob.ar/elementor-192/';
+const pageInfo = await getPageInfo("elementor-192");
+const pageId = pageInfo?.id ?? "";
+const title = pageInfo?.title ?? "elementor-192";
+const pageUrl = "https://clic.baradero.gob.ar/elementor-192/";
 const response = await fetch(pageUrl);
 const pageHtml = await response.text();
 
 const noticias = await getPostsByCategory(9, { perPage: 20 });
 
-const eventosUrl = 'https://clic.baradero.gob.ar/eventos/';
-const clicUrl = 'https://clic.baradero.gob.ar/elementor-117/';
-const sobreNosotrosUrl = 'https://clic.baradero.gob.ar/sobre-nosotros/';
+const eventosUrl = "https://clic.baradero.gob.ar/eventos/";
+const clicUrl = "https://clic.baradero.gob.ar/elementor-117/";
+const sobreNosotrosUrl = "https://clic.baradero.gob.ar/sobre-nosotros/";
 
 const eventosHtml = (await (await fetch(eventosUrl)).text())
-  .replace(/<header[\s\S]*?<\/header>/g, '')
-  .replace(/<footer[\s\S]*?<\/footer>/g, '');
+  .replace(/<header[\s\S]*?<\/header>/g, "")
+  .replace(/<footer[\s\S]*?<\/footer>/g, "");
 
 const clicHtml = (await (await fetch(clicUrl)).text())
-  .replace(/<header[\s\S]*?<\/header>/g, '')
-  .replace(/<footer[\s\S]*?<\/footer>/g, '');
+  .replace(/<header[\s\S]*?<\/header>/g, "")
+  .replace(/<footer[\s\S]*?<\/footer>/g, "");
 
 const sobreHtml = (await (await fetch(sobreNosotrosUrl)).text())
-  .replace(/<header[\s\S]*?<\/header>/g, '')
-  .replace(/<footer[\s\S]*?<\/footer>/g, '');
+  .replace(/<header[\s\S]*?<\/header>/g, "")
+  .replace(/<footer[\s\S]*?<\/footer>/g, "");
 
-let content = pageHtml.replace(/<header[\s\S]*?<\/header>/g, '');
-content = content.replace(/<footer[\s\S]*?<\/footer>/g, '');
-
+let content = pageHtml.replace(/<header[\s\S]*?<\/header>/g, "");
+content = content.replace(/<footer[\s\S]*?<\/footer>/g, "");
 ---
 
 <html lang="es">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>{title}</title>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{title}</title>
+  </head>
 
-  <link rel="stylesheet" href="https://clic.baradero.gob.ar/wp-content/plugins/elementor/assets/css/frontend.min.css" />
-  <link rel="stylesheet" href="https://clic.baradero.gob.ar/wp-content/themes/astra/assets/css/minified/main.min.css" />
-  <link rel="stylesheet" href="https://clic.baradero.gob.ar/wp-content/uploads/elementor/css/global.css" />
-  <link rel="stylesheet" href={`https://clic.baradero.gob.ar/wp-content/uploads/elementor/css/post-${pageId}.css`} />
-  <link rel="stylesheet" href="https://clic.baradero.gob.ar/wp-content/uploads/elementor/css/post-9.css" />
-  <link rel="stylesheet" href="https://clic.baradero.gob.ar/wp-content/plugins/elementor/assets/lib/eicons/css/elementor-icons.min.css" />
-  <link rel="stylesheet" href="https://clic.baradero.gob.ar/wp-content/uploads/elementor/google-fonts/css/roboto.css" />
-  <link rel="stylesheet" href="https://clic.baradero.gob.ar/wp-content/uploads/elementor/google-fonts/css/robotoslab.css" />
-</head>
+  <body>
+    <Layout title={title} pageId={pageId}>
+      <Header slot="header" />
 
-<body>
-  <Layout title={title}>
-    <Header slot="header" />
+      <div class="wp-content" set:html={content} />
 
-    <div class="wp-content" set:html={content} />
+      <section
+        id="noticias-section"
+        class="container mx-auto px-4 py-8 relative"
+      >
+        <div
+          class="grid grid-cols-1 lg:grid-cols-[300px_1fr] gap-8 items-start relative"
+        >
+          <!-- Columna ASIDE -->
+          <aside id="sidebar" class="transition-all duration-300 relative">
+            <div class="sidebar-inner w-full">
+              <div
+                class="bg-white border border-gray-200 rounded-xl shadow-md overflow-hidden"
+              >
+                <div
+                  class="bg-[#2B72AC] text-white text-lg font-semibold px-5 py-3 rounded-t-xl"
+                >
+                  Secciones
+                </div>
+                <div class="p-4 space-y-4">
+                  <a
+                    href="/eventos"
+                    class="group block bg-white border border-gray-200 rounded-lg p-4 shadow-sm hover:shadow-lg transition-all duration-200 transform hover:-translate-y-1 hover:border-[#2B72AC]"
+                  >
+                    <div class="flex items-center gap-3">
+                      <span
+                        class="text-2xl transition-transform group-hover:scale-110"
+                        >📅</span
+                      >
+                      <span
+                        class="text-gray-800 font-medium text-sm group-hover:text-[#2B72AC]"
+                        >Eventos</span
+                      >
+                    </div>
+                  </a>
 
-    <section id="noticias-section" class="container mx-auto px-4 py-8 relative">
-  <div class="grid grid-cols-1 lg:grid-cols-[300px_1fr] gap-8 items-start relative">
+                  <a
+                    href="/clic"
+                    class="group block bg-white border border-gray-200 rounded-lg p-4 shadow-sm hover:shadow-lg transition-all duration-200 transform hover:-translate-y-1 hover:border-[#2B72AC]"
+                  >
+                    <div class="flex items-center gap-3">
+                      <span
+                        class="text-2xl transition-transform group-hover:scale-110"
+                        >🎓</span
+                      >
+                      <span
+                        class="text-gray-800 font-medium text-sm group-hover:text-[#2B72AC]"
+                        >Clic</span
+                      >
+                    </div>
+                  </a>
 
-    <!-- Columna ASIDE -->
-    <aside id="sidebar" class="transition-all duration-300 relative">
-      <div class="sidebar-inner w-full">
-        <div class="bg-white border border-gray-200 rounded-xl shadow-md overflow-hidden">
-          <div class="bg-[#2B72AC] text-white text-lg font-semibold px-5 py-3 rounded-t-xl">
-            Secciones
-          </div>
-          <div class="p-4 space-y-4">
-
-            <a href="/eventos" class="group block bg-white border border-gray-200 rounded-lg p-4 shadow-sm hover:shadow-lg transition-all duration-200 transform hover:-translate-y-1 hover:border-[#2B72AC]">
-              <div class="flex items-center gap-3">
-                <span class="text-2xl transition-transform group-hover:scale-110">📅</span>
-                <span class="text-gray-800 font-medium text-sm group-hover:text-[#2B72AC]">Eventos</span>
+                  <a
+                    href="/sob-nosotros"
+                    class="group block bg-white border border-gray-200 rounded-lg p-4 shadow-sm hover:shadow-lg transition-all duration-200 transform hover:-translate-y-1 hover:border-[#2B72AC]"
+                  >
+                    <div class="flex items-center gap-3">
+                      <span
+                        class="text-2xl transition-transform group-hover:scale-110"
+                        >🧑‍💼</span
+                      >
+                      <span
+                        class="text-gray-800 font-medium text-sm group-hover:text-[#2B72AC]"
+                        >Sobre Nosotros</span
+                      >
+                    </div>
+                  </a>
+                </div>
               </div>
-            </a>
+            </div>
+          </aside>
 
-            <a href="/clic" class="group block bg-white border border-gray-200 rounded-lg p-4 shadow-sm hover:shadow-lg transition-all duration-200 transform hover:-translate-y-1 hover:border-[#2B72AC]">
-              <div class="flex items-center gap-3">
-                <span class="text-2xl transition-transform group-hover:scale-110">🎓</span>
-                <span class="text-gray-800 font-medium text-sm group-hover:text-[#2B72AC]">Clic</span>
-              </div>
-            </a>
-
-            <a href="/sob-nosotros" class="group block bg-white border border-gray-200 rounded-lg p-4 shadow-sm hover:shadow-lg transition-all duration-200 transform hover:-translate-y-1 hover:border-[#2B72AC]">
-              <div class="flex items-center gap-3">
-                <span class="text-2xl transition-transform group-hover:scale-110">🧑‍💼</span>
-                <span class="text-gray-800 font-medium text-sm group-hover:text-[#2B72AC]">Sobre Nosotros</span>
-              </div>
-            </a>
-
+          <div id="noticias" class="grid grid-cols-1 md:grid-cols-2 gap-8">
+            {
+              noticias.length > 0 ? (
+                noticias.map((post: any) => <PostCard post={post} />)
+              ) : (
+                <p class="text-gray-600 text-center col-span-full">
+                  No hay Noticias cargadas todavía.
+                </p>
+              )
+            }
           </div>
         </div>
-      </div>
-    </aside>
+      </section>
 
-    <!-- Columna NOTICIAS -->
-    <div id="noticias" class="grid grid-cols-1 md:grid-cols-2 gap-8">
-      {noticias.length > 0 ? (
-        noticias.map((post) => <PostCard post={post} />)
-      ) : (
-        <p class="text-gray-600 text-center col-span-full">
-          No hay Noticias cargadas todavía.
-        </p>
-      )}
-    </div>
+      <Footer slot="footer" />
+    </Layout>
 
-  </div>
-</section>
+    <script
+      src="https://clic.baradero.gob.ar/wp-includes/js/jquery/jquery.min.js"
+    ></script>
+    <script
+      src="https://clic.baradero.gob.ar/wp-content/plugins/elementor/assets/js/frontend.min.js"
+    ></script>
 
-
-
-
-    <Footer slot="footer" />
-  </Layout>
-
-  <script src="https://clic.baradero.gob.ar/wp-includes/js/jquery/jquery.min.js"></script>
-  <script src="https://clic.baradero.gob.ar/wp-content/plugins/elementor/assets/js/frontend.min.js"></script>
-
-  <style is:global>
-    h2 {
-      color: #2B72AC !important;
-    }
-    .elementor-button {
-      background-color: #2B72AC;
-    }
-    .elementor-button:hover {
-      background-color: #185688;
-    }
-
-    .wp-content {
-      margin: 0 !important;
-      padding: 0 !important;
-    }
-
-    .wp-content > * {
-      margin: 0 !important;
-      padding: 0 !important;
-    }
-
-    .elementor-section {
-      margin: 0 !important;
-      padding: 0 !important;
-      min-height: 0 !important;
-      height: auto !important;
-    }
-
-    .elementor-container {
-      padding: 0 !important;
-    }
-
-    .sidebar-inner {
-      position: static;
-      transition: top 0.3s ease;
-    }
-
-  </style>
-
-
-<script>
-  document.addEventListener('DOMContentLoaded', () => {
-    const sidebar = document.getElementById('sidebar');
-    const sidebarInner = sidebar.querySelector('.sidebar-inner');
-    const noticiasSection = document.getElementById('noticias-section');
-
-    const startOffset = noticiasSection.offsetTop; // punto en el que empieza a fijarse
-    const stopOffset = noticiasSection.offsetTop + noticiasSection.offsetHeight - sidebarInner.offsetHeight - 20;
-
-    const updateSidebar = () => {
-      const scrollY = window.scrollY || window.pageYOffset;
-
-      if (scrollY > startOffset && scrollY < stopOffset) {
-        sidebarInner.style.position = 'fixed';
-        sidebarInner.style.top = '20px';
-        sidebarInner.style.width = sidebar.offsetWidth + 'px';
-      } else if (scrollY >= stopOffset) {
-        sidebarInner.style.position = 'absolute';
-        sidebarInner.style.top = (stopOffset - startOffset) + 'px';
-        sidebarInner.style.width = '100%';
-      } else {
-        sidebarInner.style.position = 'static';
-        sidebarInner.style.top = 'auto';
-        sidebarInner.style.width = '100%';
+    <style is:global>
+      h2 {
+        color: #2b72ac !important;
       }
-    };
-
-    updateSidebar();
-    window.addEventListener('scroll', updateSidebar);
-    window.addEventListener('resize', () => {
-      if (sidebarInner.style.position === 'fixed') {
-        sidebarInner.style.width = sidebar.offsetWidth + 'px';
+      .elementor-button {
+        background-color: #2b72ac;
       }
-    });
-  });
-</script>
+      .elementor-button:hover {
+        background-color: #185688;
+      }
 
+      .wp-content {
+        margin: 0 !important;
+        padding: 0 !important;
+      }
 
+      .wp-content > * {
+        margin: 0 !important;
+        padding: 0 !important;
+      }
 
-</body>
+      .elementor-section {
+        margin: 0 !important;
+        padding: 0 !important;
+        min-height: 0 !important;
+        height: auto !important;
+      }
+
+      .elementor-container {
+        padding: 0 !important;
+      }
+
+      .sidebar-inner {
+        position: static;
+        transition: top 0.3s ease;
+      }
+    </style>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", () => {
+        const sidebar = document.getElementById("sidebar");
+        const sidebarInner = sidebar
+          ? (sidebar.querySelector(".sidebar-inner") as HTMLElement)
+          : null;
+        const noticiasSection = document.getElementById("noticias-section");
+
+        if (sidebarInner && noticiasSection) {
+          const startOffset = noticiasSection.offsetTop; // punto en el que empieza a fijarse
+          const stopOffset =
+            noticiasSection.offsetTop +
+            noticiasSection.offsetHeight -
+            sidebarInner.offsetHeight -
+            20;
+
+          const updateSidebar = () => {
+            const scrollY = window.scrollY || window.pageYOffset;
+
+            if (scrollY > startOffset && scrollY < stopOffset) {
+              (sidebarInner as HTMLElement).style.position = "fixed";
+              (sidebarInner as HTMLElement).style.top = "20px";
+              (sidebarInner as HTMLElement).style.width = sidebar
+                ? sidebar.offsetWidth + "px"
+                : "100%";
+            } else if (scrollY >= stopOffset) {
+              (sidebarInner as HTMLElement).style.position = "absolute";
+              (sidebarInner as HTMLElement).style.top =
+                stopOffset - startOffset + "px";
+              (sidebarInner as HTMLElement).style.width = "100%";
+            } else {
+              (sidebarInner as HTMLElement).style.position = "static";
+              (sidebarInner as HTMLElement).style.top = "auto";
+              (sidebarInner as HTMLElement).style.width = "100%";
+            }
+          };
+
+          updateSidebar();
+          window.addEventListener("scroll", updateSidebar);
+          window.addEventListener("resize", () => {
+            if ((sidebarInner as HTMLElement).style.position === "fixed") {
+              (sidebarInner as HTMLElement).style.width = sidebar
+                ? sidebar.offsetWidth + "px"
+                : "100%";
+            }
+          });
+        }
+      });
+    </script>
+  </body>
 </html>

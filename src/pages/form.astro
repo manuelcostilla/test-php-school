@@ -6,219 +6,369 @@ let pageId, title, content;
 if (pageData) {
   ({ id: pageId, title, content } = pageData);
 } else {
+  // It's generally better to let the component render with a default title/content
+  // instead of halting, but following your original error logging.
   console.error("Error: no se pudo obtener la página 248.");
 }
 ---
 
-<Layout>
-  <Fragment slot="head">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
-    <style is:global>
-      /* Se eliminó el estilo para el <body>. Esto arregla el problema con el header y el footer. */
-      
-      main {
-        padding: 20px;
-      }
+<Layout title={title} pageId={pageId}>
+  <style scoped>
+    main h1 {
+      text-align: left;
+      margin-bottom: 2rem;
+      color: #495057;
+      font-weight: 700;
+      letter-spacing: -0.5px;
+      text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.05);
+    }
 
-      main h1 {
-        text-align: center;
-        margin-bottom: 2rem;
-        color: #495057;
-        font-weight: 700;
-        letter-spacing: -0.5px;
-        text-shadow: 1px 1px 2px rgba(0,0,0,0.05);
-      }
+    .wpcf7 {
+      max-width: 700px;
+      margin: 40px auto;
+      padding: 40px;
+      background-color: #ffffff;
+      border-radius: 12px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+      transition:
+        transform 0.3s ease,
+        box-shadow 0.3s ease;
+    }
+    .wpcf7:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
+    }
 
-      /* Contenedor principal del formulario */
-      .wpcf7 {
-        max-width: 700px;
-        margin: 40px auto;
-        padding: 40px;
-        background-color: #ffffff;
-        border-radius: 12px;
-        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-        transition: transform 0.3s ease, box-shadow 0.3s ease;
-      }
-      .wpcf7:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
-      }
-      
-      /* Estilos de las secciones */
-      .form-section h2 {
-        text-align: center;
-        color: #007bff;
-        margin-bottom: 2rem;
-        font-weight: 600;
-        font-size: 1.75rem;
-      }
-      
-      .form-section {
-        display: none;
-        animation: fadeIn 0.5s ease-in-out;
-      }
-      .form-section.active {
-        display: block;
-      }
+    .form-section h2 {
+      text-align: center;
+      color: #007bff;
+      margin-bottom: 2rem;
+      font-weight: 600;
+      font-size: 1.75rem;
+    }
 
-      @keyframes fadeIn {
-        from {
-          opacity: 0;
-          transform: translateY(20px);
-        }
-        to {
-          opacity: 1;
-          transform: translateY(0);
-        }
-      }
+    .form-section {
+      display: none;
+      animation: fadeIn 0.5s ease-in-out;
+    }
+    .form-section.active {
+      display: block;
+    }
 
-      /* Estilos de los campos del formulario */
-      .wpcf7 p {
-        margin-bottom: 1.5rem;
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
       }
-      .wpcf7 label {
-        font-weight: 600;
-        color: #495057;
-        margin-bottom: 0.5rem;
-        font-size: 1rem;
-        display: block;
-      }
-      .wpcf7-form-control:not(.wpcf7-submit):not([type="radio"]) {
-        width: 100%;
-        padding: 14px 18px;
-        border: 1px solid #ced4da;
-        border-radius: 10px;
-        font-size: 1rem;
-        color: #343a40;
-        background-color: #f8f9fa;
-        transition: border-color 0.3s, box-shadow 0.3s, background-color 0.3s;
-      }
-      .wpcf7-form-control:not(.wpcf7-submit):not([type="radio"]):focus {
-        border-color: #007bff;
-        box-shadow: 0 0 0 4px rgba(0, 123, 255, 0.15);
-        background-color: #ffffff;
-        outline: none;
-      }
-
-      /* Estilos de los botones */
-      .form-navigation {
-        display: flex;
-        justify-content: space-between;
-        margin-top: 2rem;
-      }
-      .form-navigation button, .wpcf7-submit {
-        padding: 14px 28px;
-        background-color: #007bff;
-        color: white;
-        font-size: 1rem;
-        font-weight: 600;
-        border: none;
-        border-radius: 8px;
-        cursor: pointer;
-        transition: background-color 0.3s, transform 0.2s, box-shadow 0.2s;
-        box-shadow: 0 4px 10px rgba(0, 123, 255, 0.2);
-        flex-grow: 1;
-        margin: 0 5px;
-      }
-
-      .form-navigation button.prev-btn {
-        background-color: #6c757d;
-        box-shadow: 0 4px 10px rgba(108, 117, 125, 0.2);
-      }
-      .form-navigation button:hover {
-        background-color: #0056b3;
-        transform: translateY(-2px);
-        box-shadow: 0 6px 15px rgba(0, 123, 255, 0.3);
-      }
-      .form-navigation button.prev-btn:hover {
-        background-color: #5a6268;
-        box-shadow: 0 6px 15px rgba(108, 117, 125, 0.3);
-      }
-      .wpcf7-submit:hover {
-        background-color: #0056b3;
-        transform: translateY(-2px);
-      }
-      .form-navigation button:active, .wpcf7-submit:active {
+      to {
+        opacity: 1;
         transform: translateY(0);
-        box-shadow: 0 2px 5px rgba(0,0,0,0.2);
       }
+    }
 
-      /* Mensajes de respuesta y error */
-      .wpcf7-response-output {
-        margin-top: 2rem;
-        padding: 1.5rem;
-        border-radius: 10px;
-        text-align: center;
-        font-weight: 600;
-        font-size: 1.1rem;
-        box-shadow: 0 2px 10px rgba(0,0,0,0.08);
-      }
-      .wpcf7-mail-sent-ok {
-        background-color: #d4edda;
-        color: #155724;
-        border: 1px solid #c3e6cb;
-      }
-      .wpcf7-validation-errors, .wpcf7-mail-sent-ng {
-        background-color: #f8d7da;
-        color: #721c24;
-        border: 1px solid #f5c6cb;
-      }
-      .wpcf7-not-valid {
-        border-color: #dc3545 !important;
-        box-shadow: 0 0 0 4px rgba(220, 53, 69, 0.15) !important;
-      }
-      .wpcf7-not-valid-tip {
-        font-size: 0.875rem;
-        color: #dc3545;
-        margin-top: 0.25rem;
-      }
-    </style>
-  </Fragment>
+    .wpcf7 p {
+      margin-bottom: 1.5rem;
+    }
+    .wpcf7 label {
+      font-weight: 600;
+      color: #495057;
+      margin-bottom: 0.5rem;
+      font-size: 1rem;
+      display: block;
+    }
+    .wpcf7-form-control:not(.wpcf7-submit):not([type="radio"]) {
+      width: 100%;
+      padding: 14px 18px;
+      border: 1px solid #ced4da;
+      border-radius: 10px;
+      font-size: 1rem;
+      color: #343a40;
+      background-color: #f8f9fa;
+      transition:
+        border-color 0.3s,
+        box-shadow 0.3s,
+        background-color 0.3s;
+    }
+    .wpcf7-form-control:not(.wpcf7-submit):not([type="radio"]):focus {
+      border-color: #007bff;
+      box-shadow: 0 0 0 4px rgba(0, 123, 255, 0.15);
+      background-color: #ffffff;
+      outline: none;
+    }
 
-  <main>
+    /* Estilos de los botones */
+    .form-navigation {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 2rem;
+    }
+    .form-navigation button,
+    .wpcf7-submit {
+      padding: 14px 28px;
+      background-color: #007bff;
+      color: white;
+      font-size: 1rem;
+      font-weight: 600;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition:
+        background-color 0.3s,
+        transform 0.2s,
+        box-shadow 0.2s;
+      box-shadow: 0 4px 10px rgba(0, 123, 255, 0.2);
+      flex-grow: 1;
+      margin: 0 5px;
+    }
+
+    .form-navigation button.prev-btn {
+      background-color: #6c757d;
+      box-shadow: 0 4px 10px rgba(108, 117, 125, 0.2);
+    }
+    .form-navigation button:hover {
+      background-color: #0056b3;
+      transform: translateY(-2px);
+      box-shadow: 0 6px 15px rgba(0, 123, 255, 0.3);
+    }
+    .form-navigation button.prev-btn:hover {
+      background-color: #5a6268;
+      box-shadow: 0 6px 15px rgba(108, 117, 125, 0.3);
+    }
+    .wpcf7-submit:hover {
+      background-color: #0056b3;
+      transform: translateY(-2px);
+    }
+    .form-navigation button:active,
+    .wpcf7-submit:active {
+      transform: translateY(0);
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    }
+
+    /* Mensajes de respuesta y error */
+    .wpcf7-response-output {
+      margin-top: 2rem;
+      padding: 1.5rem;
+      border-radius: 10px;
+      text-align: center;
+      font-weight: 600;
+      font-size: 1.1rem;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+    }
+    .wpcf7-mail-sent-ok {
+      background-color: #d4edda;
+      color: #155724;
+      border: 1px solid #c3e6cb;
+    }
+    .wpcf7-validation-errors,
+    .wpcf7-mail-sent-ng {
+      background-color: #f8d7da;
+      color: #721c24;
+      border: 1px solid #f5c6cb;
+    }
+    .wpcf7-not-valid {
+      border-color: #dc3545 !important;
+      box-shadow: 0 0 0 4px rgba(220, 53, 69, 0.15) !important;
+    }
+    .wpcf7-not-valid-tstyle {
+      font-size: 0.875rem;
+      color: #dc3545;
+      margin-top: 0.25rem;
+    }
+  </style>
+
+  <main style="padding: 20px;">
     <h1 set:html={title} />
-    <Fragment set:html={content} />
+    <div set:html={content} />
     <div class="wpcf7">
       <form class="wpcf7-form">
         <div id="section-1" class="form-section active">
           <h2>Datos Personales</h2>
-          <p><label>Nombres<br><input type="text" name="nombres" class="wpcf7-form-control" required></label></p>
-          <p><label>Apellidos<br><input type="text" name="apellidos" class="wpcf7-form-control" required></label></p>
-          <p><label>Sexo<br>
-            <select name="sexo" class="wpcf7-form-control" required>
-              <option value="">Selecciona una opción</option>
-              <option value="Masculino">Masculino</option>
-              <option value="Femenino">Femenino</option>
-              <option value="Otro">Otro</option>
-            </select>
-          </label></p>
-          <p><label>DNI<br><input type="text" name="dni" class="wpcf7-form-control" required></label></p>
-          <p><label>Fecha de nacimiento<br><input type="date" name="fecha-nacimiento" class="wpcf7-form-control" required></label></p>
-          <p><label>Lugar de nacimiento<br><input type="text" name="lugar-nacimiento" class="wpcf7-form-control"></label></p>
-          <p><label>Estado civil<br><input type="text" name="estado-civil" class="wpcf7-form-control"></label></p>
-          <p><label>Hijos (cantidad)<br>
-            <input type="number" name="hijos" class="wpcf7-form-control" min="0" step="1" inputmode="numeric">
-          </label></p>
-          <p><label>Familiares a cargo<br>
-            <input type="number" name="familiares-a-cargo" class="wpcf7-form-control" min="0" step="1" inputmode="numeric">
-          </label></p>
-          <p><label>Domicilio<br><input type="text" name="domicilio" class="wpcf7-form-control"></label></p>
-          <p><label>N°<br><input type="text" name="numero-domicilio" class="wpcf7-form-control"></label></p>
-          <p><label>Piso<br><input type="text" name="piso" class="wpcf7-form-control"></label></p>
-          <p><label>Depto<br><input type="text" name="depto" class="wpcf7-form-control"></label></p>
-          <p><label>Localidad/Barrio<br><input type="text" name="localidad" class="wpcf7-form-control"></label></p>
-          <p><label>Partido<br><input type="text" name="partido" class="wpcf7-form-control"></label></p>
-          <p><label>Teléfono<br>
-            <input type="tel" name="telefono" class="wpcf7-form-control" inputmode="tel" pattern="[0-9+\s\-()]{6,20}" placeholder="Ej: 3411234567 o +5493411234567">
-          </label></p>
-          <p><label>Teléfono alternativo<br>
-            <input type="tel" name="telefono-alternativo" class="wpcf7-form-control" inputmode="tel" pattern="[0-9+\s\-()]{6,20}">
-          </label></p>
-          <p><label>Correo electrónico<br>
-            <input type="email" name="correo-electronico" class="wpcf7-form-control" required placeholder="usuario@ejemplo.com">
-          </label></p>
+          <p>
+            <label
+              >Nombres<br /><input
+                type="text"
+                name="nombres"
+                class="wpcf7-form-control"
+                required
+              /></label
+            >
+          </p>
+          <p>
+            <label
+              >Apellidos<br /><input
+                type="text"
+                name="apellidos"
+                class="wpcf7-form-control"
+                required
+              /></label
+            >
+          </p>
+          <p>
+            <label
+              >Sexo<br />
+              <select name="sexo" class="wpcf7-form-control" required>
+                <option value="">Selecciona una opción</option>
+                <option value="Masculino">Masculino</option>
+                <option value="Femenino">Femenino</option>
+                <option value="Otro">Otro</option>
+              </select>
+            </label>
+          </p>
+          <p>
+            <label
+              >DNI<br /><input
+                type="text"
+                name="dni"
+                class="wpcf7-form-control"
+                required
+              /></label
+            >
+          </p>
+          <p>
+            <label
+              >Fecha de nacimiento<br /><input
+                type="date"
+                name="fecha-nacimiento"
+                class="wpcf7-form-control"
+                required
+              /></label
+            >
+          </p>
+          <p>
+            <label
+              >Lugar de nacimiento<br /><input
+                type="text"
+                name="lugar-nacimiento"
+                class="wpcf7-form-control"
+              /></label
+            >
+          </p>
+          <p>
+            <label
+              >Estado civil<br /><input
+                type="text"
+                name="estado-civil"
+                class="wpcf7-form-control"
+              /></label
+            >
+          </p>
+          <p>
+            <label
+              >Hijos (cantidad)<br />
+              <input
+                type="number"
+                name="hijos"
+                class="wpcf7-form-control"
+                min="0"
+                step="1"
+                inputmode="numeric"
+              />
+            </label>
+          </p>
+          <p>
+            <label
+              >Familiares a cargo<br />
+              <input
+                type="number"
+                name="familiares-a-cargo"
+                class="wpcf7-form-control"
+                min="0"
+                step="1"
+                inputmode="numeric"
+              />
+            </label>
+          </p>
+          <p>
+            <label
+              >Domicilio<br /><input
+                type="text"
+                name="domicilio"
+                class="wpcf7-form-control"
+              /></label
+            >
+          </p>
+          <p>
+            <label
+              >N°<br /><input
+                type="text"
+                name="numero-domicilio"
+                class="wpcf7-form-control"
+              /></label
+            >
+          </p>
+          <p>
+            <label
+              >Piso<br /><input
+                type="text"
+                name="piso"
+                class="wpcf7-form-control"
+              /></label
+            >
+          </p>
+          <p>
+            <label
+              >Depto<br /><input
+                type="text"
+                name="depto"
+                class="wpcf7-form-control"
+              /></label
+            >
+          </p>
+          <p>
+            <label
+              >Localidad/Barrio<br /><input
+                type="text"
+                name="localidad"
+                class="wpcf7-form-control"
+              /></label
+            >
+          </p>
+          <p>
+            <label
+              >Partido<br /><input
+                type="text"
+                name="partido"
+                class="wpcf7-form-control"
+              /></label
+            >
+          </p>
+          <p>
+            <label
+              >Teléfono<br />
+              <input
+                type="tel"
+                name="telefono"
+                class="wpcf7-form-control"
+                inputmode="tel"
+                pattern="[0-9+\s\-()]{6,20}"
+                placeholder="Ej: 3411234567 o +5493411234567"
+              />
+            </label>
+          </p>
+          <p>
+            <label
+              >Teléfono alternativo<br />
+              <input
+                type="tel"
+                name="telefono-alternativo"
+                class="wpcf7-form-control"
+                inputmode="tel"
+                pattern="[0-9+\s\-()]{6,20}"
+              />
+            </label>
+          </p>
+          <p>
+            <label
+              >Correo electrónico<br />
+              <input
+                type="email"
+                name="correo-electronico"
+                class="wpcf7-form-control"
+                required
+                placeholder="usuario@ejemplo.com"
+              />
+            </label>
+          </p>
           <div class="form-navigation">
             <button type="button" class="next-btn">Siguiente</button>
           </div>
@@ -226,14 +376,78 @@ if (pageData) {
 
         <div id="section-2" class="form-section">
           <h2>Estudios Cursados</h2>
-          <p><label>Título nivel medio o polimodal<br><input type="text" name="titulo-medio" class="wpcf7-form-control"></label></p>
-          <p><label>Año de egreso<br><input type="text" name="anio-egreso-medio" class="wpcf7-form-control"></label></p>
-          <p><label>Escuela<br><input type="text" name="escuela" class="wpcf7-form-control"></label></p>
-          <p><label>Distrito<br><input type="text" name="distrito" class="wpcf7-form-control"></label></p>
-          <p><label>Otros estudios<br><input type="text" name="otros-estudios-1" class="wpcf7-form-control"></label></p>
-          <p><label>Año de egreso<br><input type="text" name="anio-egreso-otros-1" class="wpcf7-form-control"></label></p>
-          <p><label>Segundo título<br><input type="text" name="otros-estudios-2" class="wpcf7-form-control"></label></p>
-          <p><label>Año de egreso del segundo título<br><input type="text" name="anio-egreso-otros-2" class="wpcf7-form-control"></label></p>
+          <p>
+            <label
+              >Título nivel medio o polimodal<br /><input
+                type="text"
+                name="titulo-medio"
+                class="wpcf7-form-control"
+              /></label
+            >
+          </p>
+          <p>
+            <label
+              >Año de egreso<br /><input
+                type="text"
+                name="anio-egreso-medio"
+                class="wpcf7-form-control"
+              /></label
+            >
+          </p>
+          <p>
+            <label
+              >Escuela<br /><input
+                type="text"
+                name="escuela"
+                class="wpcf7-form-control"
+              /></label
+            >
+          </p>
+          <p>
+            <label
+              >Distrito<br /><input
+                type="text"
+                name="distrito"
+                class="wpcf7-form-control"
+              /></label
+            >
+          </p>
+          <p>
+            <label
+              >Otros estudios<br /><input
+                type="text"
+                name="otros-estudios-1"
+                class="wpcf7-form-control"
+              /></label
+            >
+          </p>
+          <p>
+            <label
+              >Año de egreso<br /><input
+                type="text"
+                name="anio-egreso-otros-1"
+                class="wpcf7-form-control"
+              /></label
+            >
+          </p>
+          <p>
+            <label
+              >Segundo título<br /><input
+                type="text"
+                name="otros-estudios-2"
+                class="wpcf7-form-control"
+              /></label
+            >
+          </p>
+          <p>
+            <label
+              >Año de egreso del segundo título<br /><input
+                type="text"
+                name="anio-egreso-otros-2"
+                class="wpcf7-form-control"
+              /></label
+            >
+          </p>
           <div class="form-navigation">
             <button type="button" class="prev-btn">Atrás</button>
             <button type="button" class="next-btn">Siguiente</button>
@@ -242,20 +456,64 @@ if (pageData) {
 
         <div id="section-3" class="form-section">
           <h2>Datos Laborales</h2>
-          <p><label>¿Trabaja?<br>
-            <input type="radio" name="trabaja" value="Sí" required> Sí
-            <input type="radio" name="trabaja" value="No"> No
-          </label></p>
-          <p><label>Establecimiento en el que trabaja<br><input type="text" name="establecimiento-trabajo" class="wpcf7-form-control"></label></p>
-          <p><label>Teléfono laboral<br>
-            <input type="tel" name="telefono-laboral" class="wpcf7-form-control" inputmode="tel" pattern="[0-9+\s\-()]{6,20}">
-          </label></p>
-          <p><label>Horario habitual<br><input type="text" name="horario-laboral" class="wpcf7-form-control"></label></p>
-          <p><label>Obra social<br><input type="text" name="obra-social" class="wpcf7-form-control"></label></p>
-          <p><label>N°<br><input type="text" name="numero-obra-social" class="wpcf7-form-control"></label></p>
+          <p>
+            <label
+              >¿Trabaja?<br />
+              <input type="radio" name="trabaja" value="Sí" required /> Sí
+              <input type="radio" name="trabaja" value="No" /> No
+            </label>
+          </p>
+          <p>
+            <label
+              >Establecimiento en el que trabaja<br /><input
+                type="text"
+                name="establecimiento-trabajo"
+                class="wpcf7-form-control"
+              /></label
+            >
+          </p>
+          <p>
+            <label
+              >Teléfono laboral<br />
+              <input
+                type="tel"
+                name="telefono-laboral"
+                class="wpcf7-form-control"
+                inputmode="tel"
+                pattern="[0-9+\s\-()]{6,20}"
+              />
+            </label>
+          </p>
+          <p>
+            <label
+              >Horario habitual<br /><input
+                type="text"
+                name="horario-laboral"
+                class="wpcf7-form-control"
+              /></label
+            >
+          </p>
+          <p>
+            <label
+              >Obra social<br /><input
+                type="text"
+                name="obra-social"
+                class="wpcf7-form-control"
+              /></label
+            >
+          </p>
+          <p>
+            <label
+              >N°<br /><input
+                type="text"
+                name="numero-obra-social"
+                class="wpcf7-form-control"
+              /></label
+            >
+          </p>
           <div class="form-navigation">
             <button type="button" class="prev-btn">Atrás</button>
-            <input type="submit" value="Enviar" class="wpcf7-submit">
+            <input type="submit" value="Enviar" class="wpcf7-submit" />
           </div>
         </div>
 
@@ -263,216 +521,16 @@ if (pageData) {
           <input type="hidden" name="_wpcf7" value="303" />
           <input type="hidden" name="_wpcf7_version" value="6.1.1" />
           <input type="hidden" name="_wpcf7_locale" value="es_AR" />
-          <input type="hidden" name="_wpcf7_unit_tag" value="wpcf7-f303-p248-o1" />
+          <input
+            type="hidden"
+            name="_wpcf7_unit_tag"
+            value="wpcf7-f303-p248-o1"
+          />
           <input type="hidden" name="_wpcf7_container_post" value="248" />
           <input type="hidden" name="_wpcf7_posted_data_hash" value="" />
         </fieldset>
       </form>
-      <div id="response-message" class="wpcf7-response-output" style="display:none;"></div>
+      <div></div>
     </div>
   </main>
 </Layout>
-
-<script>
-  (function () {
-    const form = document.querySelector('.wpcf7-form');
-    const responseDiv = document.getElementById('response-message');
-    const sections = document.querySelectorAll('.form-section');
-    let currentSectionIndex = 0;
-
-    const showSection = (index) => {
-      sections.forEach((section, i) => {
-        section.classList.remove('active');
-        if (i === index) {
-          section.classList.add('active');
-        }
-      });
-    };
-
-    const clearFieldErrors = () => {
-      form.querySelectorAll('.wpcf7-not-valid').forEach(el => el.classList.remove('wpcf7-not-valid'));
-      form.querySelectorAll('.wpcf7-not-valid-tip').forEach(el => el.remove());
-      responseDiv.style.display = 'none';
-      responseDiv.textContent = '';
-      responseDiv.className = 'wpcf7-response-output';
-    };
-
-    const addFieldError = (fieldName, message) => {
-      const candidates = [
-        `[name="${fieldName}"]`,
-        `[name="${fieldName.replace(/-/g, '_')}"]`,
-        `[name="${fieldName.replace(/_/g, '-')}"]`,
-        `[name="your-${fieldName}"]`,
-        `[name="${fieldName}[]"]`
-      ];
-      let field = null;
-      for (const sel of candidates) {
-        field = form.querySelector(sel);
-        if (field) break;
-      }
-      if (!field) {
-        const p = document.createElement('div');
-        p.className = 'wpcf7-not-valid-tip';
-        p.textContent = `${fieldName}: ${message}`;
-        responseDiv.appendChild(p);
-        return;
-      }
-      field.classList.add('wpcf7-not-valid');
-      const tip = document.createElement('div');
-      tip.className = 'wpcf7-not-valid-tip';
-      tip.textContent = message;
-      if (field.nextSibling) {
-        field.parentNode.insertBefore(tip, field.nextSibling);
-      } else {
-        field.parentNode.appendChild(tip);
-      }
-    };
-
-    const clientValidate = (formData) => {
-      const errors = [];
-      const email = formData.get('correo-electronico') || '';
-      if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-        errors.push({ field: 'correo-electronico', message: 'Formato de correo inválido.' });
-      }
-      ['hijos', 'familiares-a-cargo'].forEach(name => {
-        const v = formData.get(name);
-        if (v !== null && v !== '' && isNaN(Number(v))) {
-          errors.push({ field: name, message: 'Ingresá un número válido.' });
-        }
-      });
-      ['telefono', 'telefono-alternativo', 'telefono-laboral'].forEach(name => {
-        const v = (formData.get(name) || '').toString().trim();
-        if (v !== '') {
-          const digits = v.replace(/[^0-9]/g, '');
-          if (digits.length < 6) {
-            errors.push({ field: name, message: 'Ingresá un número de teléfono válido (más dígitos).' });
-          }
-        }
-      });
-      return errors;
-    };
-
-    const validateCurrentSection = (sectionId) => {
-      const currentSection = document.getElementById(sectionId);
-      const inputs = currentSection.querySelectorAll('[required]');
-      let allValid = true;
-      inputs.forEach(input => {
-        if (!input.checkValidity()) {
-          input.classList.add('wpcf7-not-valid');
-          const tip = document.createElement('div');
-          tip.className = 'wpcf7-not-valid-tip';
-          tip.textContent = input.validationMessage || 'Campo obligatorio.';
-          if (input.nextSibling) {
-            input.parentNode.insertBefore(tip, input.nextSibling);
-          } else {
-            input.parentNode.appendChild(tip);
-          }
-          allValid = false;
-        }
-      });
-      return allValid;
-    };
-
-    form.querySelectorAll('.next-btn').forEach(button => {
-      button.addEventListener('click', () => {
-        clearFieldErrors();
-        if (validateCurrentSection(`section-${currentSectionIndex + 1}`)) {
-          currentSectionIndex++;
-          showSection(currentSectionIndex);
-        } else {
-          responseDiv.style.display = 'block';
-          responseDiv.className = 'wpcf7-response-output wpcf7-validation-errors';
-          responseDiv.textContent = 'Por favor, completa los campos obligatorios antes de continuar.';
-        }
-      });
-    });
-
-    form.querySelectorAll('.prev-btn').forEach(button => {
-      button.addEventListener('click', () => {
-        clearFieldErrors();
-        currentSectionIndex--;
-        showSection(currentSectionIndex);
-      });
-    });
-
-    form.addEventListener('submit', async (event) => {
-      event.preventDefault();
-      clearFieldErrors();
-
-      const formData = new FormData(form);
-      formData.set('_wpcf7', '303');
-      formData.set('_wpcf7_version', '6.1.1');
-      formData.set('_wpcf7_locale', 'es_AR');
-      formData.set('_wpcf7_unit_tag', 'wpcf7-f303-p248-o1');
-      formData.set('_wpcf7_container_post', '248');
-      formData.set('_wpcf7_posted_data_hash', '');
-
-      const clientErrors = clientValidate(formData);
-      if (clientErrors.length > 0) {
-        responseDiv.style.display = 'block';
-        responseDiv.className = 'wpcf7-response-output wpcf7-validation-errors';
-        responseDiv.textContent = 'Corrige los errores marcados en el formulario.';
-        clientErrors.forEach(err => addFieldError(err.field, err.message));
-        return;
-      }
-
-      const formId = "303";
-      const apiUrl = `https://clic.baradero.gob.ar/wp-json/contact-form-7/v1/contact-forms/${formId}/feedback`;
-
-      try {
-        for (let [k, v] of formData.entries()) console.log(`${k}: ${v}`);
-
-        const response = await fetch(apiUrl, {
-          method: 'POST',
-          body: formData
-        });
-
-        const result = await response.json().catch(() => null);
-        console.log('CF7 response raw:', response);
-        console.log('CF7 response json:', result);
-
-        responseDiv.style.display = 'block';
-
-        if (response.ok && result && result.status === 'mail_sent') {
-          responseDiv.className = 'wpcf7-response-output wpcf7-mail-sent-ok';
-          responseDiv.textContent = '¡Gracias por inscribirte! Tu inscripción ha sido enviada con éxito.';
-          form.reset();
-          showSection(0);
-          return;
-        }
-
-        if (result && result.invalid_fields && result.invalid_fields.length) {
-          responseDiv.className = 'wpcf7-response-output wpcf7-validation-errors';
-          responseDiv.textContent = 'Hay errores en algunos campos. Revisa los mensajes junto a cada campo.';
-          for (const obj of result.invalid_fields) {
-            addFieldError(obj.field, obj.message);
-          }
-          return;
-        }
-
-        if (result && result.message) {
-          responseDiv.className = 'wpcf7-response-output wpcf7-validation-errors';
-          responseDiv.textContent = result.message;
-          return;
-        }
-
-        responseDiv.className = 'wpcf7-response-output wpcf7-mail-sent-ng';
-        responseDiv.textContent = 'Uno o más campos tienen un error. Por favor, revisá e intentá de nuevo.';
-        if (result) {
-          const pre = document.createElement('pre');
-          pre.style.maxHeight = '200px';
-          pre.style.overflow = 'auto';
-          pre.textContent = JSON.stringify(result, null, 2);
-          responseDiv.appendChild(pre);
-        }
-
-      } catch (error) {
-        console.error('Error de red:', error);
-        responseDiv.className = 'wpcf7-response-output wpcf7-mail-sent-ng';
-        responseDiv.textContent = 'Hubo un problema de conexión. Por favor, verifica tu internet e inténtalo de nuevo.';
-      }
-    });
-
-    showSection(0);
-  })();
-</script>
